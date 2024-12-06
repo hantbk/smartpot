@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:plantapp/pages/weatherdets.dart';
 
 class Home extends StatelessWidget {
   const Home({super.key});
@@ -13,10 +14,16 @@ class Home extends StatelessWidget {
       appBar: AppBar(
         title: Padding(
           padding: const EdgeInsets.all(8.0),
-          child: Text(
-            "Plant Pulse",
-            style: GoogleFonts.poppins(
-                color: Colors.white, fontWeight: FontWeight.w600, fontSize: 25),
+          child: Row(
+            children: [
+              Text(
+                "SmartPlant",
+                style: GoogleFonts.poppins(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w600,
+                    fontSize: 25),
+              ),
+            ],
           ),
         ),
         backgroundColor: Colors.transparent,
@@ -90,7 +97,41 @@ class Home extends StatelessWidget {
                   )
                 ]),
               )
-            ])
+            ]),
+            Padding(
+              padding: const EdgeInsets.all(15.0),
+              child: Container(
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                    color: Colors.white,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.shade300,
+                        blurRadius: 35,
+                      ),
+                    ]),
+                child: GridView.count(
+                  crossAxisCount: 2,
+                  childAspectRatio: 2,
+                  shrinkWrap: true,
+                  padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+                  children: const [
+                    WeatherDetails(
+                        wtype: "Temperature",
+                        val: "30°C",
+                        ic: Icons.thermostat),
+                    WeatherDetails(
+                        wtype: "Humidity", val: "36%", ic: Icons.water),
+                    WeatherDetails(
+                        wtype: "Soil Mosture", val: "30%", ic: Icons.water_drop),
+                    WeatherDetails(
+                        wtype: "Light Intensity",
+                        val: "30 %",
+                        ic: Icons.lightbulb),
+                  ],
+                ),
+              ),
+            )
           ],
         ),
       ),
