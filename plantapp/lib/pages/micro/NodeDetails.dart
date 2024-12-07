@@ -1,8 +1,8 @@
+// ignore_for_file: no_leading_underscores_for_local_identifiers, unused_local_variable
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:plantapp/pages/micro/sensordets.dart';
 import 'package:firebase_core/firebase_core.dart';
-// import 'package:tflite_flutter/tflite_flutter.dart' as tfl;
 import 'package:firebase_database/firebase_database.dart';
 
 class NodeDetails extends StatefulWidget {
@@ -14,73 +14,12 @@ class NodeDetails extends StatefulWidget {
 
 class _NodeDetailsState extends State<NodeDetails> {
   final Future<FirebaseApp> _fApp = Firebase.initializeApp();
-  List result = [];
   String sensedtemp = "35";
   String sensedhumidity = "60";
   String sensedsoil = "25";
   String sensedlight = "100";
   String sensedTankLevel = "50";
   int stateMaybom = 0;
-
-  String predicted = "";
-  final List<String> labels = [
-    'rice',
-    'maize',
-    'chickpea',
-    'kidneybeans',
-    'pigeonpeas',
-    'mothbeans',
-    'mungbean',
-    'blackgram',
-    'lentil',
-    'pomegranate',
-    'banana',
-    'mango',
-    'grapes',
-    'watermelon',
-    'muskmelon',
-    'apple',
-    'orange',
-    'papaya',
-    'coconut',
-    'cotton',
-    'jute',
-    'coffee'
-  ];
-
-  // runModel(temp, humd, rain) async {
-  //   final interpreter = await tfl.Interpreter.fromAsset(
-  //       'lib/mlmodel/linearRegrssionModel.tflite');
-  //   //prepare input as required by your model
-  //   //in my case it required a single number and i am requiring it from user
-  //   //passing user entered number to model as input
-  //   final input = [
-  //     [temp, humd, rain]
-  //   ];
-  //   //Prepare output set and use reshape method from the plugin.
-  //   //Input and output preparing guide comes with the model documentation.
-  //   var output = List.filled(22, 0).reshape([1, 22]);
-  //   //run the interpreter on prepared input and output.
-  //   interpreter.run(input, output);
-  //   //model process the input and updates the output
-  //   //Result variable to show output to user
-  //   result = output[0];
-  //   print(result);
-
-  //   int maxIndex = 0;
-  //   double maxValue = result[0];
-  //   for (int i = 1; i < result.length; i++) {
-  //     if (result[i] > maxValue) {
-  //       maxIndex = i;
-  //       maxValue = result[i];
-  //     }
-  //   }
-
-  //   setState(() {
-  //     predicted = labels[maxIndex];
-  //     print(predicted);
-  //   });
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -203,17 +142,12 @@ class _NodeDetailsState extends State<NodeDetails> {
   }
 
   Widget sensorcontent() {
-    Query _tempRef =
-        FirebaseDatabase.instance.ref().child("gardenId1/dhtNhietDo");
-    Query _humidityRef =
-        FirebaseDatabase.instance.ref().child("gardenId1/dhtDoAm");
+    Query _tempRef = FirebaseDatabase.instance.ref().child("gardenId1/dhtNhietDo");
+    Query _humidityRef = FirebaseDatabase.instance.ref().child("gardenId1/dhtDoAm");
     Query _soilRef = FirebaseDatabase.instance.ref().child("gardenId1/doAmDat");
-    Query _lightRef =
-        FirebaseDatabase.instance.ref().child("gardenId1/anhSang");
-    Query _tankRef =
-        FirebaseDatabase.instance.ref().child("gardenId1/khoangCach");
-    Query _stateMaybomRef =
-        FirebaseDatabase.instance.ref().child("gardenId1/mayBom");
+    Query _lightRef = FirebaseDatabase.instance.ref().child("gardenId1/anhSang");
+    Query _tankRef = FirebaseDatabase.instance.ref().child("gardenId1/khoangCach");
+    Query _stateMaybomRef = FirebaseDatabase.instance.ref().child("gardenId1/mayBom");
 
     // Listen for changes in humidity
     _humidityRef.onValue.listen((event) {
@@ -274,7 +208,7 @@ class _NodeDetailsState extends State<NodeDetails> {
     // // Listen for changes in pump state
     // _stateMaybomRef.onValue.listen((event) {
     //   setState(() {
-    //     final rawData = event.snapshot.value.toString();
+    //     final rawData = event.snapshot.value.toString(); // Example: "1": "ON" or "0": "OFF"
     //     stateMaybom = int.tryParse(rawData) ?? 0;
     //   });
     // });
