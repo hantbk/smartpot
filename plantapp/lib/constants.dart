@@ -1,1 +1,0 @@
-const OPENWEATHER_API = "eb6a9fda3bd40aae4bbbbf6a77c25d07";
