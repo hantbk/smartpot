@@ -2,5 +2,5 @@
 class User{
   String name = "";
   String loc = "";
-  String crop = "";
+  String plant = "";
 }
