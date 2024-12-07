@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "673389701956",
+    "firebase_url": "https://iot1-33b58-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "iot1-33b58",
+    "storage_bucket": "iot1-33b58.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:673389701956:android:7c2288bba5dd5794350511",
+        "android_client_info": {
+          "package_name": "com.example.plantapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyByYCKPGF4PFyMpFNuME0doRhJPyKqMMlo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
