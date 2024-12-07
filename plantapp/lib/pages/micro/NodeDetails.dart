@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:plantapp/pages/micro/sensordets.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:plantapp/pages/models/Plant.dart';
 
 class NodeDetails extends StatefulWidget {
   const NodeDetails({super.key});
@@ -101,8 +102,7 @@ class _NodeDetailsState extends State<NodeDetails> {
             ElevatedButton(
                 // TO DO: Add model feature here
                 onPressed: () {
-                  // runModel(double.parse(sensedtemp),
-                  //     double.parse(sensedhumidity), sensedrainfall.toDouble());
+                  showInformation(context, 2);
                 },
                 style: ElevatedButton.styleFrom(
                   shape: RoundedRectangleBorder(
@@ -111,7 +111,7 @@ class _NodeDetailsState extends State<NodeDetails> {
                   backgroundColor: const Color.fromRGBO(74, 173, 82, 1),
                 ),
                 child: Text(
-                  "Get Plant Recommendation",
+                  "Get Plant Information",
                   style: GoogleFonts.poppins(
                     height: 1,
                     color: Colors.white,
@@ -142,12 +142,17 @@ class _NodeDetailsState extends State<NodeDetails> {
   }
 
   Widget sensorcontent() {
-    Query _tempRef = FirebaseDatabase.instance.ref().child("gardenId1/dhtNhietDo");
-    Query _humidityRef = FirebaseDatabase.instance.ref().child("gardenId1/dhtDoAm");
+    Query _tempRef =
+        FirebaseDatabase.instance.ref().child("gardenId1/dhtNhietDo");
+    Query _humidityRef =
+        FirebaseDatabase.instance.ref().child("gardenId1/dhtDoAm");
     Query _soilRef = FirebaseDatabase.instance.ref().child("gardenId1/doAmDat");
-    Query _lightRef = FirebaseDatabase.instance.ref().child("gardenId1/anhSang");
-    Query _tankRef = FirebaseDatabase.instance.ref().child("gardenId1/khoangCach");
-    Query _stateMaybomRef = FirebaseDatabase.instance.ref().child("gardenId1/mayBom");
+    Query _lightRef =
+        FirebaseDatabase.instance.ref().child("gardenId1/anhSang");
+    Query _tankRef =
+        FirebaseDatabase.instance.ref().child("gardenId1/khoangCach");
+    Query _stateMaybomRef =
+        FirebaseDatabase.instance.ref().child("gardenId1/mayBom");
 
     // Listen for changes in humidity
     _humidityRef.onValue.listen((event) {
@@ -246,4 +251,111 @@ class _NodeDetailsState extends State<NodeDetails> {
       ],
     );
   }
+}
+
+void showInformation(BuildContext context, int plantId) {
+  // Tìm kiếm cây dựa trên id
+  Plant plant = plants.firstWhere((plant) => plant.id == plantId);
+
+  // Hiển thị thông tin cây trong AlertDialog
+  showDialog(
+    context: context,
+    builder: (context) {
+      return AlertDialog(
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: Text('OK'),
+          ),
+        ],
+        title: Text(
+          'Plant Information',
+          style: TextStyle(fontWeight: FontWeight.w600, fontSize: 20),
+        ),
+        content: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Image.asset(plant.imageUrl),
+              SizedBox(height: 10),
+              Text(
+                plant.description,
+                style: TextStyle(fontSize: 16),
+              ),
+              SizedBox(height: 10),
+              Text(
+                plant.name.toUpperCase(),
+                style: TextStyle(
+                  fontWeight: FontWeight.w900,
+                  fontSize: 24,
+                  color: Colors.green,
+                ),
+              ),
+              SizedBox(height: 10),
+              // Lời khuyên chăm sóc cây
+              Text(
+                "Lời khuyên chăm sóc:",
+                style: TextStyle(fontWeight: FontWeight.w700, fontSize: 18),
+              ),
+              SizedBox(height: 5),
+              Text(
+                "Nhiệt độ:",
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                  color: Colors.green,
+                ),
+              ),
+              Text(
+                plant.temperatureAdvice,
+                style: TextStyle(fontSize: 16),
+              ),
+              SizedBox(height: 5),
+              Text(
+                "Độ ẩm đất:",
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                  color: Colors.green,
+                ),
+              ),
+              Text(
+                plant.soilMoistureAdvice,
+                style: TextStyle(fontSize: 16),
+              ),
+              SizedBox(height: 5),
+              Text(
+                "Chu kỳ tưới cây:",
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                  color: Colors.green,
+                ),
+              ),
+              Text(
+                plant.wateringCycleAdvice,
+                style: TextStyle(fontSize: 16),
+              ),
+              SizedBox(height: 5),
+              Text(
+                "Ánh sáng:",
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                  color: Colors.green,
+                ),
+              ),
+              Text(
+                plant.lightAdvice,
+                style: TextStyle(fontSize: 16),
+              ),
+            ],
+          ),
+        ),
+      );
+    },
+  );
 }
