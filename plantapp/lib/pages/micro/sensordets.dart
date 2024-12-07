@@ -12,7 +12,10 @@ class SensorDetails extends StatelessWidget {
         Container(
           decoration: const BoxDecoration(
           ),
-          child: Icon(icon, size: 50, color: Colors.white,),
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Icon(icon, size: 50, color: Colors.white,),
+          ),
         ),
         Wrap(
             direction: Axis.vertical,
