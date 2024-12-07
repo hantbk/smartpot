@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:plantapp/constants.dart';
 import 'package:plantapp/pages/home/weatherdets.dart';
 import 'package:weather/weather.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class WeatherContainer extends StatefulWidget {
   const WeatherContainer({super.key});
@@ -11,15 +11,29 @@ class WeatherContainer extends StatefulWidget {
 }
 
 class _WeatherContainerState extends State<WeatherContainer> {
-  final WeatherFactory _wf = WeatherFactory(OPENWEATHER_API);
+  late final WeatherFactory _wf;
+  Weather? _weather; // Class-level variable
 
   @override
   void initState() {
     super.initState();
-    _wf.currentWeatherByCityName("Hanoi").then((w) {
+
+    final openWeatherApi = dotenv.env['OPENWEATHER_API'] ?? '';
+    _wf = WeatherFactory(openWeatherApi);
+
+    _fetchWeather();
+  }
+
+  Future<void> _fetchWeather() async {
+    try {
+      final weather = await _wf.currentWeatherByCityName("Hanoi");
       setState(() {
+        _weather = weather;
       });
-    });
+    } catch (e) {
+      // ignore: avoid_print
+      print('Error fetching weather data: $e');
+    }
   }
 
   @override
@@ -28,49 +42,44 @@ class _WeatherContainerState extends State<WeatherContainer> {
       padding: const EdgeInsets.all(15.0),
       child: Container(
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20),
-            color: Colors.white,
-            boxShadow: [
-              BoxShadow(
-                color: Colors.grey.shade300,
-                blurRadius: 35,
-              ),
-            ]),
-        child: GridView.count(
-          crossAxisCount: 2,
-          childAspectRatio: 2,
-          shrinkWrap: true,
-          padding: const EdgeInsets.symmetric(
-            horizontal: 15,
-            vertical: 10,
-          ),
-          physics: const NeverScrollableScrollPhysics(),
-          children: const [
-            WeatherDetails(
-                wtype: "Temperature", val: "30°C", ic: Icons.thermostat),
-            WeatherDetails(wtype: "Humidity", val: "36%", ic: Icons.water),
-            WeatherDetails(
-                wtype: "Soil Mosture", val: "30%", ic: Icons.water_drop),
-            WeatherDetails(
-                wtype: "Light Intensity", val: "30%", ic: Icons.lightbulb)
+          borderRadius: BorderRadius.circular(20),
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.shade300,
+              blurRadius: 35,
+            ),
           ],
-          // children: [
-          //   WeatherDetails(
-          //       wtype: "Temperature",
-          //       val: "${_weather?.temperature?.celsius?.toStringAsFixed(0)}°C",
-          //       ic: Icons.thermostat),
-          //   WeatherDetails(
-          //       wtype: "Humidity",
-          //       val: "${_weather?.humidity?.toStringAsFixed(0)}%",
-          //       ic: Icons.water),
-          //   const WeatherDetails(
-          //       wtype: "Rainfall", val: "0mm", ic: Icons.water_drop),
-          //   WeatherDetails(
-          //       wtype: "Wind Speed",
-          //       val: "${_weather?.windSpeed?.toStringAsFixed(0)}mps",
-          //       ic: Icons.wind_power_rounded)
-          // ],
         ),
+        child: _weather == null
+            ? const Center(child: CircularProgressIndicator())
+            : GridView.count(
+                crossAxisCount: 2,
+                childAspectRatio: 2,
+                shrinkWrap: true,
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 15,
+                  vertical: 10,
+                ),
+                physics: const NeverScrollableScrollPhysics(),
+                children: [
+                  WeatherDetails(
+                      wtype: "Temperature",
+                      val:
+                          "${_weather?.temperature?.celsius?.toStringAsFixed(0)}°C",
+                      ic: Icons.thermostat),
+                  WeatherDetails(
+                      wtype: "Humidity",
+                      val: "${_weather?.humidity?.toStringAsFixed(0)}%",
+                      ic: Icons.water),
+                  const WeatherDetails(
+                      wtype: "Rainfall", val: "0mm", ic: Icons.water_drop),
+                  WeatherDetails(
+                      wtype: "Wind Speed",
+                      val: "${_weather?.windSpeed?.toStringAsFixed(0)}mps",
+                      ic: Icons.wind_power_rounded),
+                ],
+              ),
       ),
     );
   }

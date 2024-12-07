@@ -43,3 +43,9 @@ app.*.map.json
 /android/app/release
 
 .idea/
+
+.env
+
+.vscode
+
+.idea
