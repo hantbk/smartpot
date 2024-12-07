@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:plantapp/pages/home/homebuttons.dart';
-import 'package:plantapp/pages/home/weatherdets.dart';
 import 'package:plantapp/pages/macro/MacroDetails.dart';
 import 'package:plantapp/pages/micro/MicroDetails.dart';
 import 'package:plantapp/pages/home/weather.dart';
