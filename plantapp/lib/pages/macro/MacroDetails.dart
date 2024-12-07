@@ -18,7 +18,7 @@ class MacroPage extends StatelessWidget {
             child: Row(
               children: [
                 Text(
-                  "PlantPulse",
+                  "Smart Planting System",
                   style: GoogleFonts.poppins(
                       color: Colors.white,
                       fontWeight: FontWeight.w600,
@@ -57,7 +57,7 @@ class MacroPage extends StatelessWidget {
             ),
             Padding(
               padding: const EdgeInsets.all(20.0),
-              child: Text("Satellite View",
+              child: Text("Water Tank",
                   style: GoogleFonts.poppins(
                     color: Colors.white,
                     height: 0.9,

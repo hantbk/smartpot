@@ -29,7 +29,7 @@ class MicroPage extends StatelessWidget {
           child: Row(
             children: [
               Text(
-                "PlantPulse",
+                "Smart Planting System",
                 style: GoogleFonts.poppins(
                     color: Colors.white,
                     fontWeight: FontWeight.w600,
@@ -76,7 +76,61 @@ class MicroPage extends StatelessWidget {
                   fontSize: 28,
                 )),
           )
-        ])
+        ]),
+        const SizedBox(height: 10),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
+          child: Container(
+            height: 100,
+            width: 100,
+            decoration: BoxDecoration(
+                color: const Color.fromRGBO(0, 100, 53, 1),
+                borderRadius: BorderRadius.circular(20)),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 30.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Wrap(
+                    direction: Axis.vertical,
+                    children: [
+                      Text(
+                        "Pot 1",
+                        style: GoogleFonts.poppins(
+                          height: 1,
+                          color: Colors.white,
+                          fontWeight: FontWeight.w600, // Different font weight
+                          fontSize: 25, // Same font size, or adjust as needed
+                        ),
+                      ),
+                      Text(
+                        "Cây kim tiền",
+                        style: GoogleFonts.poppins(
+                          height: 1,
+                          color: Colors.white,
+                          fontWeight:
+                              FontWeight.normal, // Different font weight
+                          fontSize: 15, // Same font size, or adjust as needed
+                        ),
+                      )
+                    ],
+                  ),
+                  Container(
+                    height: 80,
+                    width: 80,
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(80)),
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Image.asset("lib/images/plant.png"),
+                    ),
+                  )
+                ],
+              ),
+            ),
+          ),
+        )
       ]),
     );
   }
