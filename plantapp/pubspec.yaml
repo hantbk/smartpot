@@ -33,6 +33,7 @@ dependencies:
   google_fonts:
   weather:
   firebase_core: ^3.8.1
+  tflite_flutter: ^0.10.4
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -65,6 +66,8 @@ flutter:
     - lib/images/iot.jpeg
     - lib/images/tank.jpg
     - lib/images/plant.png
+    - lib/images/cay-kim-tien.jpg
+    - lib/mlmodel/linearRegrssionModel.tflite
     - assets/env/.env
 
   # An image asset can refer to one or more resolution-specific "variants", see

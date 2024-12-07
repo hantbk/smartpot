@@ -1,6 +1,6 @@
-// ignore: file_names
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:plantapp/pages/micro/NodeDetails.dart';
 
 class MicroPage extends StatelessWidget {
   const MicroPage({super.key});
@@ -80,53 +80,62 @@ class MicroPage extends StatelessWidget {
         const SizedBox(height: 10),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
-          child: Container(
-            height: 100,
-            width: 100,
-            decoration: BoxDecoration(
-                color: const Color.fromRGBO(0, 100, 53, 1),
-                borderRadius: BorderRadius.circular(20)),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 30.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Wrap(
-                    direction: Axis.vertical,
-                    children: [
-                      Text(
-                        "Pot 1",
-                        style: GoogleFonts.poppins(
-                          height: 1,
-                          color: Colors.white,
-                          fontWeight: FontWeight.w600, // Different font weight
-                          fontSize: 25, // Same font size, or adjust as needed
+          child: GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const NodeDetails()),
+              );
+            },
+            child: Container(
+              height: 100,
+              width: 100,
+              decoration: BoxDecoration(
+                  color: const Color.fromRGBO(161, 207, 130, 1),
+                  borderRadius: BorderRadius.circular(20)),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 30.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Wrap(
+                      direction: Axis.vertical,
+                      children: [
+                        Text(
+                          "Pot 1",
+                          style: GoogleFonts.poppins(
+                            height: 1,
+                            color: Colors.white,
+                            fontWeight:
+                                FontWeight.w600, // Different font weight
+                            fontSize: 25, // Same font size, or adjust as needed
+                          ),
                         ),
-                      ),
-                      Text(
-                        "Cây kim tiền",
-                        style: GoogleFonts.poppins(
-                          height: 1,
-                          color: Colors.white,
-                          fontWeight:
-                              FontWeight.normal, // Different font weight
-                          fontSize: 15, // Same font size, or adjust as needed
-                        ),
-                      )
-                    ],
-                  ),
-                  Container(
-                    height: 80,
-                    width: 80,
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(80)),
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Image.asset("lib/images/plant.png"),
+                        Text(
+                          "Cây kim tiền",
+                          style: GoogleFonts.poppins(
+                            height: 1,
+                            color: Colors.white,
+                            fontWeight:
+                                FontWeight.normal, // Different font weight
+                            fontSize: 15, // Same font size, or adjust as needed
+                          ),
+                        )
+                      ],
                     ),
-                  )
-                ],
+                    Container(
+                      height: 80,
+                      width: 80,
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(80)),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Image.asset("lib/images/plant.png"),
+                      ),
+                    )
+                  ],
+                ),
               ),
             ),
           ),
