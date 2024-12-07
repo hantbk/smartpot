@@ -1,6 +1,7 @@
 // ignore: file_names
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import '../user/profile.dart';
 
 class MacroPage extends StatelessWidget {
   const MacroPage({super.key});
@@ -9,41 +10,47 @@ class MacroPage extends StatelessWidget {
     return Scaffold(
         extendBodyBehindAppBar: true,
         appBar: AppBar(
-          iconTheme: const IconThemeData(
-            color: Colors
-                .white, // This sets the color of the leading icon to white
-          ),
-          title: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-              children: [
-                Text(
-                  "Smart Planting System",
-                  style: GoogleFonts.poppins(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w600,
-                      fontSize: 25),
-                ),
-              ],
+            iconTheme: const IconThemeData(
+              color: Colors
+                  .white, // This sets the color of the leading icon to white
             ),
-          ),
-          backgroundColor: const Color.fromRGBO(161, 207, 107, 1),
-          actions: const [
-            Padding(
-              padding: EdgeInsets.all(15.0),
-              child: Icon(
-                Icons.person,
-                color: Colors.white,
+            title: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                children: [
+                  Text(
+                    "Smart Planting System",
+                    style: GoogleFonts.poppins(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w600,
+                        fontSize: 25),
+                  ),
+                ],
               ),
-            )
-          ],
-        ),
+            ),
+            backgroundColor: Color.fromRGBO(161, 207, 107, 1),
+            actions: [
+              Padding(
+                padding: const EdgeInsets.all(15.0),
+                child: GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => ProfilePage()),
+                      );
+                    },
+                    child: Icon(
+                      Icons.person,
+                      color: Colors.white,
+                    )),
+              ),
+            ]),
         body: ListView(children: [
           Stack(alignment: Alignment.bottomCenter, children: [
             Container(
               height: 70,
               width: 500,
-              decoration: const BoxDecoration(
+              decoration: BoxDecoration(
                   borderRadius: BorderRadius.only(
                       bottomRight: Radius.circular(50),
                       bottomLeft: Radius.circular(50)),

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:plantapp/pages/home/weatherdets.dart';
 import 'package:weather/weather.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:provider/provider.dart';
+import '../../userdets.dart';
 
 class WeatherContainer extends StatefulWidget {
   const WeatherContainer({super.key});
@@ -16,17 +18,19 @@ class _WeatherContainerState extends State<WeatherContainer> {
 
   @override
   void initState() {
-    super.initState();
 
+    super.initState();
+    String location = Provider.of<UserInfo>(context, listen: false).location;
+    
     final openWeatherApi = dotenv.env['OPENWEATHER_API'] ?? '';
     _wf = WeatherFactory(openWeatherApi);
 
-    _fetchWeather();
+    _fetchWeather(location);
   }
 
-  Future<void> _fetchWeather() async {
+  Future<void> _fetchWeather(location) async {
     try {
-      final weather = await _wf.currentWeatherByCityName("Hanoi");
+      final weather = await _wf.currentWeatherByCityName(location);
       setState(() {
         _weather = weather;
       });
@@ -65,19 +69,24 @@ class _WeatherContainerState extends State<WeatherContainer> {
                 children: [
                   WeatherDetails(
                       wtype: "Temperature",
-                      val:
-                          "${_weather?.temperature?.celsius?.toStringAsFixed(0)}°C",
+                      val: _weather?.temperature?.celsius == null
+                          ? ""
+                          : "${_weather?.temperature?.celsius?.toStringAsFixed(0)}°C",
                       ic: Icons.thermostat),
                   WeatherDetails(
                       wtype: "Humidity",
-                      val: "${_weather?.humidity?.toStringAsFixed(0)}%",
+                      val: _weather?.humidity != null
+                          ? "${_weather?.humidity?.toStringAsFixed(0)}%"
+                          : "",
                       ic: Icons.water),
                   const WeatherDetails(
                       wtype: "Rainfall", val: "0mm", ic: Icons.water_drop),
                   WeatherDetails(
                       wtype: "Wind Speed",
-                      val: "${_weather?.windSpeed?.toStringAsFixed(0)}mps",
-                      ic: Icons.wind_power_rounded),
+                      val: _weather?.windSpeed != null
+                          ? "${_weather?.windSpeed?.toStringAsFixed(0)}mps"
+                          : "",
+                      ic: Icons.wind_power_rounded)
                 ],
               ),
       ),

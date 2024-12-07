@@ -34,6 +34,7 @@ dependencies:
   weather:
   firebase_core: ^3.8.1
   firebase_database: ^11.2.0
+  provider:
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -67,7 +68,8 @@ flutter:
     - lib/images/tank.jpg
     - lib/images/plant.png
     - lib/images/cay-kim-tien.jpg
-    - lib/mlmodel/linearRegrssionModel.tflite
+    - lib/images/leaf.png
+    - lib/images/icon.jpg
     - assets/env/.env
 
   # An image asset can refer to one or more resolution-specific "variants", see

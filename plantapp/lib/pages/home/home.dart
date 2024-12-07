@@ -4,12 +4,17 @@ import 'package:plantapp/pages/home/homebuttons.dart';
 import 'package:plantapp/pages/macro/MacroDetails.dart';
 import 'package:plantapp/pages/micro/MicroDetails.dart';
 import 'package:plantapp/pages/home/weather.dart';
+import 'package:plantapp/pages/user/profile.dart';
+import 'package:provider/provider.dart';
+import '../../userdets.dart';
 
 class Home extends StatelessWidget {
   const Home({super.key});
 
   @override
   Widget build(BuildContext context) {
+    String username = Provider.of<UserInfo>(context, listen: false).name;
+    String location = Provider.of<UserInfo>(context, listen: false).location;
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
@@ -28,13 +33,20 @@ class Home extends StatelessWidget {
           ),
         ),
         backgroundColor: const Color.fromRGBO(161, 207, 107, 1),
-        actions: const [
+        actions: [
           Padding(
             padding: EdgeInsets.all(15.0),
-            child: Icon(
-              Icons.person,
-              color: Colors.white,
-            ),
+            child: GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => ProfilePage()),
+                  );
+                },
+                child: Icon(
+                  Icons.person,
+                  color: Colors.white,
+                )),
           )
         ],
       ),
@@ -44,7 +56,7 @@ class Home extends StatelessWidget {
             Container(
               height: 150,
               width: 500,
-              decoration: const BoxDecoration(
+              decoration: BoxDecoration(
                   borderRadius:
                       BorderRadius.only(bottomRight: Radius.circular(81)),
                   gradient: LinearGradient(
@@ -68,7 +80,7 @@ class Home extends StatelessWidget {
                   ),
                   children: <TextSpan>[
                     TextSpan(
-                      text: 'Username!', // Second part of the text
+                      text: '$username!', // Second part of the text
                       style: GoogleFonts.poppins(
                         height: 0.8,
                         color: Colors.white,
@@ -89,7 +101,7 @@ class Home extends StatelessWidget {
                         color: Colors.white,
                       ),
                       Text(
-                        "Hanoi, Vietnam",
+                        location,
                         style: GoogleFonts.poppins(color: Colors.white),
                       )
                     ],
@@ -99,39 +111,6 @@ class Home extends StatelessWidget {
             )
           ]),
           const WeatherContainer(),
-          // Padding(
-          //   padding: const EdgeInsets.all(15.0),
-          //   child: Container(
-          //     decoration: BoxDecoration(
-          //         borderRadius: BorderRadius.circular(20),
-          //         color: Colors.white,
-          //         boxShadow: [
-          //           BoxShadow(
-          //             color: Colors.grey.shade300,
-          //             blurRadius: 35,
-          //           ),
-          //         ]),
-          //     child: GridView.count(
-          //       crossAxisCount: 2,
-          //       childAspectRatio: 2,
-          //       shrinkWrap: true,
-          //       padding:
-          //           const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-          //       children: const [
-          //         WeatherDetails(
-          //             wtype: "Temperature", val: "30°C", ic: Icons.thermostat),
-          //         WeatherDetails(
-          //             wtype: "Humidity", val: "36%", ic: Icons.water),
-          //         WeatherDetails(
-          //             wtype: "Soil Mosture", val: "30%", ic: Icons.water_drop),
-          //         WeatherDetails(
-          //             wtype: "Light Intensity",
-          //             val: "30 %",
-          //             ic: Icons.lightbulb)
-          //       ],
-          //     ),
-          //   ),
-          // ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 8),
             child: GestureDetector(
@@ -141,7 +120,7 @@ class Home extends StatelessWidget {
                     MaterialPageRoute(builder: (context) => const MacroPage()),
                   );
                 },
-                child: const ButtonsHome(
+                child: ButtonsHome(
                   imgpath: "lib/images/tank.jpg",
                   heading: "Water Tank",
                 )),
