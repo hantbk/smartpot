@@ -4,10 +4,42 @@ import 'package:plantapp/pages/home/homebuttons.dart';
 import 'package:plantapp/pages/macro/MacroDetails.dart';
 import 'package:plantapp/pages/micro/MicroDetails.dart';
 import 'package:plantapp/pages/home/weather.dart';
+import 'package:firebase_core/firebase_core.dart';
+// import 'package:tflite_flutter/tflite_flutter.dart' as tfl;
+import 'package:firebase_database/firebase_database.dart';
+import 'package:fl_chart/fl_chart.dart';
 
-class Home extends StatelessWidget {
+class Home extends StatefulWidget {
   const Home({super.key});
+  @override
+  State<Home> createState() => _HomeState();
+}
 
+class _HomeState extends State<Home> {
+  double _distance = 0.0; // Lưu trữ khoảng cách
+
+  @override
+  void initState() {
+    super.initState();
+    fetchDistanceFromFirebase();
+  }
+  Future<void> fetchDistanceFromFirebase() async {
+    try {
+      final databaseReference = FirebaseDatabase.instance.ref();
+      final snapshot = await databaseReference.child('gardenId1/khoangCach/current').get();
+      if (snapshot.exists) {
+        final distance = double.parse(snapshot.value.toString()); // Parse giá trị
+        print('Distance fetched: $distance'); // In ra console
+        setState(() {
+          _distance = distance; // Cập nhật trạng thái
+        });
+      } else {
+        print('No data available.');
+      }
+    } catch (e) {
+      print('Error fetching data: $e');
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -134,17 +166,107 @@ class Home extends StatelessWidget {
           // ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 8),
-            child: GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const MacroPage()),
-                  );
-                },
-                child: const ButtonsHome(
-                  imgpath: "lib/images/tank.jpg",
-                  heading: "Water Tank",
-                )),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,  // Căn trái cho tiêu đề
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    // Khi người dùng chạm vào widget, chuyển đến trang MacroPage
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const MacroPage()),
+                    );
+                  },
+                  child: Container(
+                    width: double.infinity,  // Chiếm toàn bộ chiều rộng của cha chứa
+                    height: 200,  // Chiều cao của bể
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(15),
+                      color: Colors.white,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.shade300,
+                          blurRadius: 10,
+                          offset: Offset(0, 2), // Đổ bóng cho phần container
+                        ),
+                      ],
+                    ),
+                    child: Stack(
+                      alignment: Alignment.bottomCenter,  // Căn chỉnh phần nước ở dưới cùng
+                      children: [
+                        // Thành bể (chiếm toàn bộ chiều rộng của container)
+                        Container(
+                          width: double.infinity,  // Chiếm toàn bộ chiều rộng của cha
+                          height: double.infinity,  // Chiếm toàn bộ chiều cao của cha
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            border: Border.all(color: Colors.green, width: 3), // Viền xanh lá cây
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                        ),
+                        // Nước trong bể, chiều cao có thể thay đổi
+                        AnimatedContainer(
+                          width: double.infinity,  // Chiếm toàn bộ chiều rộng của bể
+                          height: 200 * (1 - _distance / 1000),  // Mức nước thay đổi, có thể thay đổi động
+                          duration: Duration(seconds: 1),
+                          decoration: BoxDecoration(
+                            color: const Color.fromARGB(255, 110, 169, 218),  // Màu nước xanh biển
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                        ),
+                        // Thêm phần chia % ở bên phải của bể
+                        Positioned(
+                          left: 10,
+                          top: 10,
+                          bottom: 10,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              // Mức 100%
+                              Text(
+                                "100%",
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              // Mức 50%
+                              Text(
+                                "50%",
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              // Mức 0%
+                              Text(
+                                "0%",
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                // Tiêu đề dưới bể nước
+                SizedBox(height: 10),  // Khoảng cách giữa bể và tiêu đề
+                Center(  // Căn giữa tiêu đề
+                  child: Text(
+                    "Tank Level",  // Tiêu đề của biểu đồ
+                    style: TextStyle(
+                      fontSize: 16,  // Kích thước chữ nhỏ hơn
+                      fontWeight: FontWeight.normal,  // Giảm độ đậm của chữ
+                      color: const Color.fromARGB(255, 0, 0, 0),  // Màu chữ nhạt hơn
+                    ),
+                  ),
+                )
+              ],
+            ),
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 8),
