@@ -12,15 +12,12 @@ class WeatherContainer extends StatefulWidget {
 
 class _WeatherContainerState extends State<WeatherContainer> {
   final WeatherFactory _wf = WeatherFactory(OPENWEATHER_API);
-  Weather? _weather;
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _wf.currentWeatherByCityName("Hanoi").then((w) {
       setState(() {
-        _weather = w;
       });
     });
   }
