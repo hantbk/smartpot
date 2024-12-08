@@ -3,7 +3,9 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:plantapp/pages/micro/PlantHealthCareSuggestionCard.dart';
 import 'package:plantapp/pages/micro/PlantSuggestionCard.dart';
+import 'package:plantapp/pages/models/PlantHealthCareSuggestion.dart';
 import 'package:plantapp/pages/models/PlantSuggestion.dart';
 import '../services/PlantIndentifyService.dart';
 import '../services/ImageEncoder.dart';
@@ -40,45 +42,7 @@ class _PlantIdentifyPageState extends State<PlantIdentifyPage> {
       }
     }
   }
-  // Future<void> sendRequest(String urlPath) async {
-  //   if (_imageFile == null && _imageBytes == null) {
-  //     _showErrorDialog("No image selected. Please select an image first.");
-  //     return;
-  //   }
-  //     // Mã hóa ảnh và gửi tới API
-  //     final String base64Image;
-  //     if (kIsWeb) {
-  //       base64Image = base64Encode(_imageBytes!);
-  //     } else {
-  //       base64Image = await ImageEncoder.encodeImageToBase64(_imageFile!);
-  //     }
-  //     final String indentifyPath =
-  //         '/identification?details=common_names,url,description,taxonomy,synonyms,watering,best_light_condition,best_soil_type,common_uses,cultural_significance,toxicity,best_watering&language=en';
-  //     final response =
-  //         await PlantIdentifyService.identifyPlant(base64Image, indentifyPath);
 
-  //     if (response != null) {
-  //       final Map<String, dynamic> data = json.decode(response);
-  //       final List<dynamic> suggestions =
-  //           data['result']['classification']['suggestions'];
-  //       final plantSuggestions = suggestions
-  //           .map((suggestion) => PlantSuggestion.fromJson(suggestion))
-  //           .toList();
-  //       // final suggestionsCards = plantSuggestions.map((suggestion) {
-  //       //   return PlantSuggestionCard(suggestion);
-  //       // }).toList();
-  //       _showSuggestionsDialog(plantSuggestions);
-  //     } else {
-  //       _showErrorDialog("An error occurred");
-  //     }
-
-  //     setState(() {
-  //       _responseText = response != null
-  //           ? "Finding successfull"
-  //           : "Failed to identify plant.";
-  //     });
-  //   }
-  // }
   Future<void> sendRequest(String urlPath) async {
     if (_imageFile == null && _imageBytes == null) {
       _showErrorDialog("No image selected. Please select an image first.");
@@ -97,12 +61,21 @@ class _PlantIdentifyPageState extends State<PlantIdentifyPage> {
 
     if (response != null) {
       final Map<String, dynamic> data = json.decode(response);
-      final List<dynamic> suggestions =
-          data['result']['classification']['suggestions'];
-      final plantSuggestions = suggestions
-          .map((suggestion) => PlantSuggestion.fromJson(suggestion))
-          .toList();
-      _showSuggestionsDialog(plantSuggestions);
+      if (urlPath.contains("health_assessment")) {
+        final List<dynamic> suggestions =
+            data['result']['disease']['suggestions'];
+        final healthCareSuggestions = suggestions
+            .map((suggestion) => PlantHealthCareSuggestion.fromJson(suggestion))
+            .toList();
+        _showHealthCareSuggestionDialog(healthCareSuggestions);
+      } else {
+        final List<dynamic> suggestions =
+            data['result']['classification']['suggestions'];
+        final plantSuggestions = suggestions
+            .map((suggestion) => PlantSuggestion.fromJson(suggestion))
+            .toList();
+        _showSuggestionsDialog(plantSuggestions);
+      }
     } else {
       _showErrorDialog("Failed to identify the plant. Please try again.");
     }
@@ -145,6 +118,50 @@ class _PlantIdentifyPageState extends State<PlantIdentifyPage> {
                     itemCount: suggestions.length,
                     itemBuilder: (context, index) {
                       return PlantSuggestionCard(suggestions[index]);
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  void _showHealthCareSuggestionDialog(
+      List<PlantHealthCareSuggestion> suggestions) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: Container(
+            padding: EdgeInsets.all(10),
+            width: MediaQuery.of(context).size.width * 0.9,
+            height: MediaQuery.of(context).size.height * 0.8,
+            child: Column(
+              children: [
+                // Tiêu đề của dialog
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    'Plant Health Care Suggestions',
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                Divider(),
+                // Danh sách các PlantHealthCareSuggestionCard
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: suggestions.length,
+                    itemBuilder: (context, index) {
+                      return PlantHealthCareSuggestionCard(suggestions[index]);
                     },
                   ),
                 ),
@@ -241,6 +258,46 @@ class _PlantIdentifyPageState extends State<PlantIdentifyPage> {
                     padding: const EdgeInsets.symmetric(
                         horizontal: 16, vertical: 10),
                   ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 30),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                ElevatedButton(
+                  onPressed: () async {
+                    if (_imageFile == null && _imageBytes == null) {
+                      _showErrorDialog(
+                          "No image selected. Please select an image first.");
+                    } else {
+                      await sendRequest(
+                          "/identification?details=common_names,url,description,taxonomy,synonyms,watering,best_light_condition,best_soil_type,common_uses,cultural_significance,toxicity,best_watering&language=en");
+                    }
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.blue,
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 16, vertical: 10),
+                  ),
+                  child: const Text('Identify Plant'),
+                ),
+                ElevatedButton(
+                  onPressed: () async {
+                    if (_imageFile == null && _imageBytes == null) {
+                      _showErrorDialog(
+                          "No image selected. Please select an image first.");
+                    } else {
+                      await sendRequest(
+                          "/health_assessment?language=en&details=local_name,description,url,treatment,classification,common_names,cause");
+                    }
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.orange,
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 16, vertical: 10),
+                  ),
+                  child: const Text('Health Care Plant'),
                 ),
               ],
             ),
