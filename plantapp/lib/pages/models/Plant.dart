@@ -28,7 +28,7 @@ List<Plant> plants = [
     imageUrl: "lib/images/cay-kim-tien.jpg",
     description: "Cây Kim Tiền là loài cây dễ chăm sóc và mang lại may mắn.",
     temperatureAdvice: "Nhiệt độ lý tưởng: 18-25°C.",
-    soilMoistureAdvice: "Độ ẩm đất: Giữ ẩm vừa phải, không để đất quá ướt.",
+    soilMoistureAdvice: "Giữ ẩm vừa phải, không để đất quá ướt.",
     wateringCycleAdvice: "2-3 lần mỗi tuần.",
     lightAdvice:
         "Cây cần ánh sáng gián tiếp, tránh ánh sáng trực tiếp quá mạnh.",

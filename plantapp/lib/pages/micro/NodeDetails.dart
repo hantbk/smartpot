@@ -115,7 +115,7 @@ class _NodeDetailsState extends State<NodeDetails> {
                 onPressed: () {
                   // runModel(double.parse(sensedtemp),
                   //     double.parse(sensedhumidity), sensedrainfall.toDouble());
-                  showInformation(context, 2);
+                  showInformation(context, 1);
                 },
                 style: ElevatedButton.styleFrom(
                   shape: RoundedRectangleBorder(
