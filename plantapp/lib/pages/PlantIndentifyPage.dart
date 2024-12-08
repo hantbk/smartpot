@@ -8,9 +8,10 @@ import '../services/PlantIndentifyService.dart';
 import '../services/ImageEncoder.dart';
 
 class PlantIdentifyPage extends StatefulWidget {
-  const PlantIdentifyPage({Key? key}) : super(key: key);
+  const PlantIdentifyPage({super.key});
 
   @override
+  // ignore: library_private_types_in_public_api
   _PlantIdentifyPageState createState() => _PlantIdentifyPageState();
 }
 
