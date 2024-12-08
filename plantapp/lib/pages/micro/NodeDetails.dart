@@ -6,17 +6,25 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:plantapp/pages/PlantIndentifyPage.dart';
 import 'package:plantapp/pages/models/Plant.dart';
-import 'package:plantapp/pages/micro/semicircle_indicator.dart';
 import 'package:plantapp/pages/micro/SmartPlanting.dart';
 
 class NodeDetails extends StatefulWidget {
-  const NodeDetails({super.key});
+  final Plant plant;
+  const NodeDetails({super.key, required this.plant});
 
   @override
   State<NodeDetails> createState() => _NodeDetailsState();
 }
 
 class _NodeDetailsState extends State<NodeDetails> {
+  late Plant selectedPlant;
+
+  @override
+  void initState() {
+    super.initState();
+    selectedPlant = widget.plant;
+  }
+
   final Future<FirebaseApp> _fApp = Firebase.initializeApp();
   String sensedtemp = "0";
   String sensedhumidity = "0";
@@ -29,7 +37,7 @@ class _NodeDetailsState extends State<NodeDetails> {
   motorSwitch(int valueStateOfMayBom) async {
     setState(() {
       motor = valueStateOfMayBom;
-      print(motor);
+      // print(motor);
     });
     await _motorRef.set(motor);
   }
@@ -75,14 +83,28 @@ class _NodeDetailsState extends State<NodeDetails> {
               height: 40,
             ),
             Center(
-                child: Text(
-              "Pot 1 Details",
-              style: GoogleFonts.poppins(
-                  color: Colors.black,
-                  fontWeight: FontWeight.w700,
-                  fontSize: 25),
-            )),
-            Image.asset("lib/images/cay-kim-tien.jpg"),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "Pot ${selectedPlant.id} details",
+                    style: GoogleFonts.poppins(
+                        color: Colors.black,
+                        fontWeight: FontWeight.w700,
+                        fontSize: 25),
+                  ),
+                  SizedBox(height: 10),
+                  Text(
+                    selectedPlant.name,
+                    style: GoogleFonts.poppins(
+                        color: Colors.black,
+                        fontWeight: FontWeight.w400,
+                        fontSize: 18),
+                  ),
+                ],
+              ),
+            ),
+            Image.asset(selectedPlant.imageUrl),
             Padding(
                 padding:
                     const EdgeInsets.symmetric(vertical: 8.0, horizontal: 20),
@@ -115,7 +137,7 @@ class _NodeDetailsState extends State<NodeDetails> {
                 onPressed: () {
                   // runModel(double.parse(sensedtemp),
                   //     double.parse(sensedhumidity), sensedrainfall.toDouble());
-                  showInformation(context, 1);
+                  showInformation(context, selectedPlant.id);
                 },
                 style: ElevatedButton.styleFrom(
                   shape: RoundedRectangleBorder(
@@ -261,106 +283,6 @@ class _NodeDetailsState extends State<NodeDetails> {
     );
   }
 }
-
-// Widget smartPlanting(VoidCallback motorSwitch, int motor, VoidCallback motorSwitch1, int motor1) {
-//   return Column(children: [
-//     Text(
-//       "Smart Watering",
-//       style: GoogleFonts.poppins(
-//         height: 1,
-//         color: Colors.black,
-//         fontWeight: FontWeight.w600, // Different font weight
-//         fontSize: 20, // Same font size, or adjust as needed
-//       ),
-//     ),
-//     SizedBox(
-//       height: 70,
-//     ),
-//     SizedBox(
-//       width: 180,
-//       child: CustomSemicircularIndicator(
-//         radius: 100,
-//         progress: 0.75, // Set the progress value here
-//         color: Color.fromRGBO(151, 203, 104, 1),
-//         backgroundColor: Color.fromRGBO(0, 100, 53, 1),
-//         strokeWidth: 25,
-//         child: Column(
-//           children: [
-//             Text(
-//               '${(0.75 * 100).toInt()}%',
-//               style: GoogleFonts.poppins(
-//                 fontSize: 35,
-//                 fontWeight: FontWeight.w800,
-//                 color: Color.fromRGBO(0, 100, 53, 1),
-//                 height: 0.7,
-//               ),
-//             ),
-//             Text(
-//               'Soil Moisture',
-//               style: GoogleFonts.poppins(
-//                   fontSize: 15,
-//                   fontWeight: FontWeight.w400,
-//                   color: Colors.black),
-//             ),
-//           ],
-//         ),
-//       ),
-//     ),
-//     SizedBox(
-//       height: 25,
-//     ),
-//     GestureDetector(
-//       onTap: motorSwitch,
-//       child: Container(
-//         width: 200,
-//         decoration: BoxDecoration(
-//           color: motor == 1 ? Colors.red : Color.fromRGBO(203, 203, 203, 1),
-//           borderRadius: BorderRadius.circular(10),
-//         ),
-//         child: Padding(
-//           padding: const EdgeInsets.all(8.0),
-//           child: Center(
-//             child: Text(
-//               motor == 1 ? "Manual On" : "Manual Off",
-//               style: GoogleFonts.poppins(
-//                 fontSize: 20,
-//                 color: motor == 1 ? Colors.white : Colors.black,
-//                 fontWeight: motor == 1 ? FontWeight.w800 : FontWeight.w400,
-//               ),
-//             ),
-//           ),
-//         ),
-//       ),
-//     ),
-//     SizedBox(height: 25), // Khoảng cách giữa 2 nút
-//     GestureDetector(
-//       onTap: () {
-//         // Không cần setState hoặc hành động gì, chỉ cần UI
-//       },
-//       child: Container(
-//         width: 200,
-//         decoration: BoxDecoration(
-//           color: Color.fromRGBO(203, 203, 203, 1),
-//           borderRadius: BorderRadius.circular(10),
-//         ),
-//         child: Padding(
-//           padding: const EdgeInsets.all(8.0),
-//           child: Center(
-//             child: Text(
-//               "Manual Off", // Hoặc "Manual On" tùy theo yêu cầu của bạn
-//               style: GoogleFonts.poppins(
-//                 fontSize: 20,
-//                 color: Colors.black,
-//                 fontWeight: FontWeight.w400,
-//               ),
-//             ),
-//           ),
-//         ),
-//       ),
-//     ),
-//     // IrrigationContainer()
-//   ]);
-// }
 
 void showInformation(BuildContext context, int plantId) {
   // Tìm kiếm cây dựa trên id
