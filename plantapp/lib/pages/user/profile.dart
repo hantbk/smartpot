@@ -10,7 +10,7 @@ class ProfilePage extends StatelessWidget {
   Widget build(BuildContext context) {
     String username = Provider.of<UserInfo>(context, listen: false).name;
     String location = Provider.of<UserInfo>(context, listen: false).location;
-    String plant = Provider.of<UserInfo>(context, listen: false).plant;
+    // String plant = Provider.of<UserInfo>(context, listen: false).plant;
 
     return Scaffold(
       extendBodyBehindAppBar: true,
@@ -119,11 +119,11 @@ class ProfilePage extends StatelessWidget {
                   title: Text("Location"),
                   subtitle: Text(location), // Display location from UserInfo
                 ),
-                ListTile(
-                  leading: Icon(Icons.eco),
-                  title: Text("Plant"),
-                  subtitle: Text(plant), // Display plant from UserInfo
-                ),
+                // ListTile(
+                //   leading: Icon(Icons.eco),
+                //   title: Text("Plant"),
+                //   subtitle: Text(plant), // Display plant from UserInfo
+                // ),
               ],
             ),
           )
