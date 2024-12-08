@@ -4,6 +4,7 @@ import 'package:plantapp/pages/micro/sensordets.dart';
 import 'package:firebase_core/firebase_core.dart';
 // import 'package:tflite_flutter/tflite_flutter.dart' as tfl;
 import 'package:firebase_database/firebase_database.dart';
+import 'package:plantapp/pages/PlantIndentifyPage.dart';
 
 class NodeDetails extends StatefulWidget {
   const NodeDetails({super.key});
@@ -162,6 +163,13 @@ class _NodeDetailsState extends State<NodeDetails> {
             ElevatedButton(
                 // TO DO: Add model feature here
                 onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          const PlantIdentifyPage(), // Điều hướng đến trang mới
+                    ),
+                  );
                   // runModel(double.parse(sensedtemp),
                   //     double.parse(sensedhumidity), sensedrainfall.toDouble());
                 },
