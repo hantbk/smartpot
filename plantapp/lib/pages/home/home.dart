@@ -151,54 +151,24 @@ class _HomeState extends State<Home> {
             )
           ]),
           const WeatherContainer(),
-          // Padding(
-          //   padding: const EdgeInsets.all(15.0),
-          //   child: Container(
-          //     decoration: BoxDecoration(
-          //         borderRadius: BorderRadius.circular(20),
-          //         color: Colors.white,
-          //         boxShadow: [
-          //           BoxShadow(
-          //             color: Colors.grey.shade300,
-          //             blurRadius: 35,
-          //           ),
-          //         ]),
-          //     child: GridView.count(
-          //       crossAxisCount: 2,
-          //       childAspectRatio: 2,
-          //       shrinkWrap: true,
-          //       padding:
-          //           const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-          //       children: const [
-          //         WeatherDetails(
-          //             wtype: "Temperature", val: "30°C", ic: Icons.thermostat),
-          //         WeatherDetails(
-          //             wtype: "Humidity", val: "36%", ic: Icons.water),
-          //         WeatherDetails(
-          //             wtype: "Soil Mosture", val: "30%", ic: Icons.water_drop),
-          //         WeatherDetails(
-          //             wtype: "Light Intensity",
-          //             val: "30 %",
-          //             ic: Icons.lightbulb)
-          //       ],
-          //     ),
-          //   ),
-          // ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 8),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start, // Căn trái cho tiêu đề
+              crossAxisAlignment:
+                  CrossAxisAlignment.start, // Căn trái cho tiêu đề
               children: [
                 GestureDetector(
                   onTap: () {
                     // Khi người dùng chạm vào widget, chuyển đến trang MacroPage
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => const MacroPage()),
+                      MaterialPageRoute(
+                          builder: (context) => const MacroPage()),
                     );
                   },
                   child: Container(
-                    width: double.infinity, // Chiếm toàn bộ chiều rộng của cha chứa
+                    width: double
+                        .infinity, // Chiếm toàn bộ chiều rộng của cha chứa
                     height: 200, // Chiều cao của bể
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(15),
@@ -212,24 +182,29 @@ class _HomeState extends State<Home> {
                       ],
                     ),
                     child: Stack(
-                      alignment: Alignment.bottomCenter, // Căn chỉnh phần nước ở dưới cùng
+                      alignment: Alignment
+                          .bottomCenter, // Căn chỉnh phần nước ở dưới cùng
                       children: [
                         // Thành bể
                         Container(
-                          width: double.infinity, // Chiếm toàn bộ chiều rộng của cha
-                          height: double.infinity, // Chiếm toàn bộ chiều cao của cha
+                          width: double
+                              .infinity, // Chiếm toàn bộ chiều rộng của cha
+                          height: double
+                              .infinity, // Chiếm toàn bộ chiều cao của cha
                           decoration: BoxDecoration(
                             color: Colors.white,
-                            border: Border.all(color: Colors.green, width: 3), // Viền xanh lá cây
+                            border: Border.all(
+                                color: Colors.green,
+                                width: 3), // Viền xanh lá cây
                             borderRadius: BorderRadius.circular(20),
                           ),
                         ),
                         // Nước trong bể, chiều cao thay đổi
                         AnimatedContainer(
-                          width: double.infinity, // Chiếm toàn bộ chiều rộng của bể
+                          width: double
+                              .infinity, // Chiếm toàn bộ chiều rộng của bể
                           height: _gardenData != null
-                              ? (200 * (1 - (_gardenData?['khoangCach']?['current'] ?? 0) / 50))
-                                  .toDouble()
+                              ? (200 *(1 -(_gardenData?['khoangCach']?['current'] ?? 0) / 50)).toDouble()
                               : 0, // Nếu không có dữ liệu, đặt chiều cao là 0
                           duration: Duration(seconds: 1),
                           decoration: BoxDecoration(
@@ -267,7 +242,21 @@ class _HomeState extends State<Home> {
                                 ),
                               ),
                               Text(
+                                "75%",
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              Text(
                                 "50%",
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              Text(
+                                "25%",
                                 style: TextStyle(
                                   color: Colors.black,
                                   fontWeight: FontWeight.bold,
@@ -302,8 +291,6 @@ class _HomeState extends State<Home> {
               ],
             ),
           ),
-
-
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 8),
             child: GestureDetector(

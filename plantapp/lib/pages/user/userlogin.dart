@@ -7,7 +7,7 @@ import '../../userdets.dart';
 class UserLogin extends StatelessWidget {
   final TextEditingController nameController = TextEditingController();
   final TextEditingController locationController = TextEditingController();
-  final TextEditingController plantController = TextEditingController();
+  // final TextEditingController plantController = TextEditingController();
 
   UserLogin({super.key});
 
@@ -108,24 +108,24 @@ class UserLogin extends StatelessWidget {
             ),
             SizedBox(height: 15),
 
-            // Plant Field
-            TextField(
-              controller: plantController,
-              decoration: InputDecoration(
-                labelText: 'Plant',
-                labelStyle: TextStyle(color: Colors.black54),
-                filled: true,
-                fillColor: Colors.white,
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(15.0),
-                  borderSide: BorderSide(color: Colors.grey),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(15.0),
-                  borderSide: BorderSide(color: Color.fromRGBO(161, 207, 107, 1)),
-                ),
-              ),
-            ),
+            // // Plant Field
+            // TextField(
+            //   controller: plantController,
+            //   decoration: InputDecoration(
+            //     labelText: 'Plant',
+            //     labelStyle: TextStyle(color: Colors.black54),
+            //     filled: true,
+            //     fillColor: Colors.white,
+            //     border: OutlineInputBorder(
+            //       borderRadius: BorderRadius.circular(15.0),
+            //       borderSide: BorderSide(color: Colors.grey),
+            //     ),
+            //     focusedBorder: OutlineInputBorder(
+            //       borderRadius: BorderRadius.circular(15.0),
+            //       borderSide: BorderSide(color: Color.fromRGBO(161, 207, 107, 1)),
+            //     ),
+            //   ),
+            // ),
             SizedBox(height: 30),
 
             // Next Button
@@ -133,7 +133,7 @@ class UserLogin extends StatelessWidget {
               onTap: () {
                 context.read<UserInfo>().setName(nameController.text);
                 context.read<UserInfo>().setLocation(locationController.text);
-                context.read<UserInfo>().setPlant(plantController.text);
+                // context.read<UserInfo>().setPlant(plantController.text);
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => Home()),
