@@ -39,11 +39,14 @@ dependencies:
   http: ^1.2.2
   image_picker: ^1.1.2
   flutter_image_compress: ^2.3.0
+  provider:
+  semicircle_indicator: ^1.1.1
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
   flutter_dotenv: ^5.2.1
+  fl_chart: 0.69.2   # Thêm thư viện fl_chart
 
 dev_dependencies:
   flutter_test:
@@ -68,12 +71,8 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - lib/images/iot.jpeg
-    - lib/images/tank.jpg
-    - lib/images/plant.png
-    - lib/images/cay-kim-tien.jpg
-    - lib/mlmodel/linearRegrssionModel.tflite
     - assets/env/.env
+    - lib/images/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
