@@ -120,7 +120,7 @@ class _HomeState extends State<Home> {
                   ),
                   children: <TextSpan>[
                     TextSpan(
-                      text: 'Username!', // Second part of the text
+                      text: '$username!', // Second part of the text
                       style: GoogleFonts.poppins(
                         height: 0.8,
                         color: Colors.white,
@@ -141,7 +141,7 @@ class _HomeState extends State<Home> {
                         color: Colors.white,
                       ),
                       Text(
-                        "Hanoi, Vietnam",
+                        location,
                         style: GoogleFonts.poppins(color: Colors.white),
                       )
                     ],
