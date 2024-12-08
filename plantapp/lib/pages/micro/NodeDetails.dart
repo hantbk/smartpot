@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:plantapp/pages/micro/sensordets.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:plantapp/pages/PlantIndentifyPage.dart';
 import 'package:plantapp/pages/models/Plant.dart';
 import 'package:plantapp/pages/micro/semicircle_indicator.dart';
 import 'package:plantapp/pages/micro/SmartPlanting.dart';
@@ -112,6 +113,8 @@ class _NodeDetailsState extends State<NodeDetails> {
             ElevatedButton(
                 // TO DO: Add model feature here
                 onPressed: () {
+                  // runModel(double.parse(sensedtemp),
+                  //     double.parse(sensedhumidity), sensedrainfall.toDouble());
                   showInformation(context, 2);
                 },
                 style: ElevatedButton.styleFrom(
@@ -127,6 +130,32 @@ class _NodeDetailsState extends State<NodeDetails> {
                     color: Colors.white,
                     fontWeight: FontWeight.normal, // Different font weight
                     fontSize: 17, // Same font size, or adjust as needed
+                  ),
+                )),
+            const SizedBox(height: 10),
+            ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          const PlantIdentifyPage(), // Điều hướng đến trang mới
+                    ),
+                  );
+                },
+                style: ElevatedButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(5.0),
+                  ),
+                  backgroundColor: const Color.fromRGBO(74, 173, 82, 1),
+                ),
+                child: Text(
+                  "Plant Indentification", // Tiêu đề của nút mới
+                  style: GoogleFonts.poppins(
+                    height: 1,
+                    color: Colors.white,
+                    fontWeight: FontWeight.normal,
+                    fontSize: 17,
                   ),
                 )),
             const SizedBox(height: 40),
