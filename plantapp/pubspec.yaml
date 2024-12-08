@@ -34,6 +34,11 @@ dependencies:
   weather:
   firebase_core: ^3.8.1
   firebase_database: ^11.2.0
+  tflite_flutter: ^0.11.0
+  dio: ^5.7.0
+  http: ^1.2.2
+  image_picker: ^1.1.2
+  flutter_image_compress: ^2.3.0
   provider:
   semicircle_indicator: ^1.1.1
 
