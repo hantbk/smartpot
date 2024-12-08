@@ -16,30 +16,39 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  double _distance = 0.0; // Lưu trữ khoảng cách
 
-  @override
+  final DatabaseReference _gardenRef = FirebaseDatabase.instance.ref().child('gardenId1');
+  Map<String, dynamic>? _gardenData;
+
+   @override
   void initState() {
     super.initState();
-    fetchDistanceFromFirebase();
+    _listenToGardenData(); // Start listening to database changes
   }
-  Future<void> fetchDistanceFromFirebase() async {
-    try {
-      final databaseReference = FirebaseDatabase.instance.ref();
-      final snapshot = await databaseReference.child('gardenId1/khoangCach/current').get();
-      if (snapshot.exists) {
-        final distance = double.parse(snapshot.value.toString()); // Parse giá trị
-        print('Distance fetched: $distance'); // In ra console
+
+  void _listenToGardenData() {
+    _gardenRef.onValue.listen((event) {
+      if (event.snapshot.exists) {
         setState(() {
-          _distance = distance; // Cập nhật trạng thái
+          _gardenData = Map<String, dynamic>.from(
+            event.snapshot.value as Map<dynamic, dynamic>,
+          );
         });
       } else {
-        print('No data available.');
+        print("No garden data found in Firebase");
+        setState(() {
+          _gardenData = null; // Clear the data if the snapshot is empty
+        });
       }
-    } catch (e) {
-      print('Error fetching data: $e');
-    }
+    });
   }
+
+  @override
+  void dispose() {
+    _gardenRef.onDisconnect(); // Stop listening to changes when the widget is disposed
+    super.dispose();
+  }
+    
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -207,7 +216,10 @@ class _HomeState extends State<Home> {
                         // Nước trong bể, chiều cao có thể thay đổi
                         AnimatedContainer(
                           width: double.infinity,  // Chiếm toàn bộ chiều rộng của bể
-                          height: 200 * (1 - _distance / 1000),  // Mức nước thay đổi, có thể thay đổi động
+                          height: _gardenData != null 
+                                  ? (200* (_gardenData?['khoangCach']?['current'] / 1000)?? 0).toDouble() 
+                                  : 0, // Nếu không có dữ liệu, đặt chiều cao là 0  // Mức nước thay đổi, có thể thay đổi động
+                          // height: 100,
                           duration: Duration(seconds: 1),
                           decoration: BoxDecoration(
                             color: const Color.fromARGB(255, 110, 169, 218),  // Màu nước xanh biển
