@@ -6,7 +6,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:plantapp/pages/PlantIndentifyPage.dart';
 import 'package:plantapp/pages/models/Plant.dart';
-import 'package:plantapp/pages/micro/semicircle_indicator.dart';
 import 'package:plantapp/pages/micro/SmartPlanting.dart';
 
 class NodeDetails extends StatefulWidget {
