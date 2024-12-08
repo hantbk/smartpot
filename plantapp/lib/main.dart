@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
-import 'package:plantapp/pages/home/home.dart';
 import 'package:plantapp/pages/start.dart';
 import 'package:plantapp/userdets.dart';
 import 'package:provider/provider.dart';
