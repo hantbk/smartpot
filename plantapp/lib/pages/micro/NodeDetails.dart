@@ -5,6 +5,9 @@ import 'package:plantapp/pages/micro/sensordets.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:plantapp/pages/models/Plant.dart';
+import 'package:semicircle_indicator/semicircle_indicator.dart';
+import 'package:plantapp/pages/micro/semicircle_indicator.dart';
+import 'package:plantapp/pages/micro/SmartPlanting.dart';
 
 class NodeDetails extends StatefulWidget {
   const NodeDetails({super.key});
@@ -17,10 +20,19 @@ class _NodeDetailsState extends State<NodeDetails> {
   final Future<FirebaseApp> _fApp = Firebase.initializeApp();
   String sensedtemp = "35";
   String sensedhumidity = "60";
-  String sensedsoil = "25";
   String sensedlight = "100";
   String sensedTankLevel = "50";
-  int stateMaybom = 0;
+  bool motor = false;
+  final DatabaseReference _motorRef =
+      FirebaseDatabase.instance.ref().child('gardenId1/mayBom');
+
+  motorSwitch() async {
+    setState(() {
+      motor = !motor;
+      print(motor);
+    });
+    await _motorRef.set(motor);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -60,8 +72,8 @@ class _NodeDetailsState extends State<NodeDetails> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            const SizedBox(
-              height: 30,
+            SizedBox(
+              height: 40,
             ),
             Center(
                 child: Text(
@@ -119,22 +131,8 @@ class _NodeDetailsState extends State<NodeDetails> {
                     fontSize: 17, // Same font size, or adjust as needed
                   ),
                 )),
-            const SizedBox(height: 30),
-            Column(
-              children: [
-                Text(
-                  "Watering Control",
-                  style: GoogleFonts.poppins(
-                    height: 1,
-                    color: Colors.black,
-                    fontWeight: FontWeight.w600, // Different font weight
-                    fontSize: 20, // Same font size, or adjust as needed
-                  ),
-                ),
-
-                // IrrigationContainer()
-              ],
-            )
+            const SizedBox(height: 40),
+            SmartPlanting(motorSwitch: motorSwitch, motor: motor),
           ],
         ),
       ),
@@ -142,17 +140,15 @@ class _NodeDetailsState extends State<NodeDetails> {
   }
 
   Widget sensorcontent() {
+    const double tankHeight = 100.0;
     Query _tempRef =
         FirebaseDatabase.instance.ref().child("gardenId1/dhtNhietDo");
     Query _humidityRef =
         FirebaseDatabase.instance.ref().child("gardenId1/dhtDoAm");
-    Query _soilRef = FirebaseDatabase.instance.ref().child("gardenId1/doAmDat");
     Query _lightRef =
         FirebaseDatabase.instance.ref().child("gardenId1/anhSang");
     Query _tankRef =
         FirebaseDatabase.instance.ref().child("gardenId1/khoangCach");
-    Query _stateMaybomRef =
-        FirebaseDatabase.instance.ref().child("gardenId1/mayBom");
 
     // Listen for changes in humidity
     _humidityRef.onValue.listen((event) {
@@ -176,17 +172,6 @@ class _NodeDetailsState extends State<NodeDetails> {
       });
     });
 
-    // Listen for changes in soil moisture
-    _soilRef.onValue.listen((event) {
-      setState(() {
-        final rawData =
-            event.snapshot.value.toString(); // Example: "{current: 29.2}"
-        final parsedValue = double.tryParse(
-            rawData.replaceAll(RegExp(r'[^\d.]'), '')); // Extracts: "29.2
-        sensedsoil = parsedValue?.toStringAsFixed(1) ?? ""; // Safely assign
-      });
-    });
-
     // Listen for changes in light intensity
     _lightRef.onValue.listen((event) {
       setState(() {
@@ -198,25 +183,22 @@ class _NodeDetailsState extends State<NodeDetails> {
       });
     });
 
-    // // Listen for changes in tank level
-    // _tankRef.onValue.listen((event) {
-    //   setState(() {
-    //     final rawData =
-    //         event.snapshot.value.toString(); // Example: "{current: 29.2}"
-    //     final parsedValue = double.tryParse(
-    //         rawData.replaceAll(RegExp(r'[^\d.]'), '')); // Extracts: "29.2"
-    //     sensedTankLevel =
-    //         parsedValue?.toStringAsFixed(1) ?? ""; // Safely assign
-    //   });
-    // });
-
-    // // Listen for changes in pump state
-    // _stateMaybomRef.onValue.listen((event) {
-    //   setState(() {
-    //     final rawData = event.snapshot.value.toString(); // Example: "1": "ON" or "0": "OFF"
-    //     stateMaybom = int.tryParse(rawData) ?? 0;
-    //   });
-    // });
+    // Listen for changes in tank level
+    _tankRef.onValue.listen((event) {
+      setState(() {
+        final rawData =
+            event.snapshot.value.toString(); // Example: "{current: 50.0}"
+        final parsedValue = double.tryParse(
+            rawData.replaceAll(RegExp(r'[^\d.]'), '')); // Extracts: "50.0"
+        if (parsedValue != null) {
+          sensedTankLevel = ((1 - (parsedValue / tankHeight)) * 100)
+              .clamp(0, 100) // Clamp between 0 and 100
+              .toStringAsFixed(1); // Format as a percentage
+        } else {
+          sensedTankLevel = ""; // Handle invalid values
+        }
+      });
+    });
 
     return GridView.count(
       crossAxisCount: 2,
@@ -239,9 +221,9 @@ class _NodeDetailsState extends State<NodeDetails> {
           stype: "Humidity",
         ),
         SensorDetails(
-          sensedval: "$sensedsoil°C",
-          icon: Icons.water_drop,
-          stype: "Soil Moisture",
+          sensedval: "$sensedTankLevel%",
+          icon: Icons.water_damage,
+          stype: "Tank Level",
         ),
         SensorDetails(
           sensedval: "$sensedlight%",
@@ -251,6 +233,80 @@ class _NodeDetailsState extends State<NodeDetails> {
       ],
     );
   }
+}
+
+Widget smartPlanting(VoidCallback motorSwitch, bool motor) {
+  return Column(children: [
+    Text(
+      "Smart Watering",
+      style: GoogleFonts.poppins(
+        height: 1,
+        color: Colors.black,
+        fontWeight: FontWeight.w600, // Different font weight
+        fontSize: 20, // Same font size, or adjust as needed
+      ),
+    ),
+    SizedBox(
+      height: 70,
+    ),
+    SizedBox(
+      width: 180,
+      child: CustomSemicircularIndicator(
+        radius: 100,
+        progress: 0.75, // Set the progress value here
+        color: Color.fromRGBO(151, 203, 104, 1),
+        backgroundColor: Color.fromRGBO(0, 100, 53, 1),
+        strokeWidth: 25,
+        child: Column(
+          children: [
+            Text(
+              '${(0.75 * 100).toInt()}%',
+              style: GoogleFonts.poppins(
+                fontSize: 35,
+                fontWeight: FontWeight.w800,
+                color: Color.fromRGBO(0, 100, 53, 1),
+                height: 0.7,
+              ),
+            ),
+            Text(
+              'Soil Moisture',
+              style: GoogleFonts.poppins(
+                  fontSize: 15,
+                  fontWeight: FontWeight.w400,
+                  color: Colors.black),
+            ),
+          ],
+        ),
+      ),
+    ),
+    SizedBox(
+      height: 25,
+    ),
+    GestureDetector(
+      onTap: motorSwitch,
+      child: Container(
+        width: 200,
+        decoration: BoxDecoration(
+          color: motor ? Colors.red : Color.fromRGBO(203, 203, 203, 1),
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Center(
+            child: Text(
+              motor ? "Motor On" : "Motor Off",
+              style: GoogleFonts.poppins(
+                fontSize: 20,
+                color: motor ? Colors.white : Colors.black,
+                fontWeight: motor ? FontWeight.w800 : FontWeight.w400,
+              ),
+            ),
+          ),
+        ),
+      ),
+    )
+    // IrrigationContainer()
+  ]);
 }
 
 void showInformation(BuildContext context, int plantId) {
