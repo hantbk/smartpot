@@ -27,50 +27,90 @@ class _PlantIdentifyPageState extends State<PlantIdentifyPage> {
 
     if (pickedFile != null) {
       if (kIsWeb) {
-        // Web: Lưu ảnh dưới dạng Uint8List
         final bytes = await pickedFile.readAsBytes();
         setState(() {
-          _imageFile = null; // Đảm bảo không dùng File trên web
+          _imageFile = null;
           _imageBytes = bytes;
         });
       } else {
-        // Native: Lưu ảnh dưới dạng File
         setState(() {
           _imageFile = File(pickedFile.path);
-          _imageBytes = null; // Đảm bảo không dùng Uint8List trên native
+          _imageBytes = null;
         });
       }
-
-      // Mã hóa ảnh và gửi tới API
-      final String base64Image;
-      if (kIsWeb) {
-        base64Image = base64Encode(_imageBytes!);
-      } else {
-        base64Image = await ImageEncoder.encodeImageToBase64(_imageFile!);
-      }
-      final response = await PlantIdentifyService.identifyPlant(base64Image);
-
-      if (response != null) {
-        final Map<String, dynamic> data = json.decode(response);
-        final List<dynamic> suggestions =
-            data['result']['classification']['suggestions'];
-        final plantSuggestions = suggestions
-            .map((suggestion) => PlantSuggestion.fromJson(suggestion))
-            .toList();
-        // final suggestionsCards = plantSuggestions.map((suggestion) {
-        //   return PlantSuggestionCard(suggestion);
-        // }).toList();
-        _showSuggestionsDialog(plantSuggestions);
-      } else {
-        _showErrorDialog();
-      }
-
-      setState(() {
-        _responseText = response != null
-            ? "Finding successfull"
-            : "Failed to identify plant.";
-      });
     }
+  }
+  // Future<void> sendRequest(String urlPath) async {
+  //   if (_imageFile == null && _imageBytes == null) {
+  //     _showErrorDialog("No image selected. Please select an image first.");
+  //     return;
+  //   }
+  //     // Mã hóa ảnh và gửi tới API
+  //     final String base64Image;
+  //     if (kIsWeb) {
+  //       base64Image = base64Encode(_imageBytes!);
+  //     } else {
+  //       base64Image = await ImageEncoder.encodeImageToBase64(_imageFile!);
+  //     }
+  //     final String indentifyPath =
+  //         '/identification?details=common_names,url,description,taxonomy,synonyms,watering,best_light_condition,best_soil_type,common_uses,cultural_significance,toxicity,best_watering&language=en';
+  //     final response =
+  //         await PlantIdentifyService.identifyPlant(base64Image, indentifyPath);
+
+  //     if (response != null) {
+  //       final Map<String, dynamic> data = json.decode(response);
+  //       final List<dynamic> suggestions =
+  //           data['result']['classification']['suggestions'];
+  //       final plantSuggestions = suggestions
+  //           .map((suggestion) => PlantSuggestion.fromJson(suggestion))
+  //           .toList();
+  //       // final suggestionsCards = plantSuggestions.map((suggestion) {
+  //       //   return PlantSuggestionCard(suggestion);
+  //       // }).toList();
+  //       _showSuggestionsDialog(plantSuggestions);
+  //     } else {
+  //       _showErrorDialog("An error occurred");
+  //     }
+
+  //     setState(() {
+  //       _responseText = response != null
+  //           ? "Finding successfull"
+  //           : "Failed to identify plant.";
+  //     });
+  //   }
+  // }
+  Future<void> sendRequest(String urlPath) async {
+    if (_imageFile == null && _imageBytes == null) {
+      _showErrorDialog("No image selected. Please select an image first.");
+      return;
+    }
+
+    final String base64Image;
+    if (kIsWeb) {
+      base64Image = base64Encode(_imageBytes!);
+    } else {
+      base64Image = await ImageEncoder.encodeImageToBase64(_imageFile!);
+    }
+
+    final response =
+        await PlantIdentifyService.identifyPlant(base64Image, urlPath);
+
+    if (response != null) {
+      final Map<String, dynamic> data = json.decode(response);
+      final List<dynamic> suggestions =
+          data['result']['classification']['suggestions'];
+      final plantSuggestions = suggestions
+          .map((suggestion) => PlantSuggestion.fromJson(suggestion))
+          .toList();
+      _showSuggestionsDialog(plantSuggestions);
+    } else {
+      _showErrorDialog("Failed to identify the plant. Please try again.");
+    }
+
+    setState(() {
+      _responseText =
+          response != null ? "Request successful" : "Request failed.";
+    });
   }
 
   void _showSuggestionsDialog(List<PlantSuggestion> suggestions) {
@@ -116,12 +156,12 @@ class _PlantIdentifyPageState extends State<PlantIdentifyPage> {
     );
   }
 
-  void _showErrorDialog() {
+  void _showErrorDialog(String message) {
     showDialog(
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text("Error"),
+          title: Text(message),
           content: Text("Failed to identify the plant. Please try again."),
           actions: [
             TextButton(

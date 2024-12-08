@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class PlantIdentifyService {
-  static Future<String?> identifyPlant(String base64Image) async {
+  static Future<String?> identifyPlant(String base64Image, String path) async {
     final headers = {
       'Api-Key': dotenv.env['PLANTID_API_KEY'] ?? '',
       'Content-Type': 'application/json',
@@ -16,8 +16,7 @@ class PlantIdentifyService {
       "similar_images": true,
     });
     final api_url = dotenv.env['PLANTID_API_URL'] ?? '';
-    final url = Uri.parse(
-        "$api_url/identification?details=common_names,url,description,taxonomy,synonyms,watering,best_light_condition,best_soil_type,common_uses,cultural_significance,toxicity,best_watering&language=en");
+    final url = Uri.parse("$api_url$path");
     final request = http.Request('POST', url);
     request.headers.addAll(headers);
     request.body = requestBody;
