@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:plantapp/pages/micro/PlantSuggestionCard.dart';
@@ -16,6 +17,7 @@ class PlantIdentifyPage extends StatefulWidget {
 
 class _PlantIdentifyPageState extends State<PlantIdentifyPage> {
   File? _imageFile;
+  Uint8List? _imageBytes;
   String? _responseText;
 
   Future<void> pickImage(ImageSource source) async {
@@ -23,12 +25,28 @@ class _PlantIdentifyPageState extends State<PlantIdentifyPage> {
     final XFile? pickedFile = await picker.pickImage(source: source);
 
     if (pickedFile != null) {
-      setState(() {
-        _imageFile = File(pickedFile.path);
-      });
+      if (kIsWeb) {
+        // Web: Lưu ảnh dưới dạng Uint8List
+        final bytes = await pickedFile.readAsBytes();
+        setState(() {
+          _imageFile = null; // Đảm bảo không dùng File trên web
+          _imageBytes = bytes;
+        });
+      } else {
+        // Native: Lưu ảnh dưới dạng File
+        setState(() {
+          _imageFile = File(pickedFile.path);
+          _imageBytes = null; // Đảm bảo không dùng Uint8List trên native
+        });
+      }
 
       // Mã hóa ảnh và gửi tới API
-      final base64Image = await ImageEncoder.encodeImageToBase64(_imageFile!);
+      final String base64Image;
+      if (kIsWeb) {
+        base64Image = base64Encode(_imageBytes!);
+      } else {
+        base64Image = await ImageEncoder.encodeImageToBase64(_imageFile!);
+      }
       final response = await PlantIdentifyService.identifyPlant(base64Image);
 
       if (response != null) {
@@ -120,14 +138,24 @@ class _PlantIdentifyPageState extends State<PlantIdentifyPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Plant Identifier'),
-        backgroundColor: Colors.green,
+        backgroundColor: const Color.fromRGBO(161, 207, 107, 1),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            if (_imageFile != null)
+            if (_imageBytes != null && kIsWeb)
+              ClipRRect(
+                borderRadius: BorderRadius.circular(10),
+                child: Image.memory(
+                  _imageBytes!,
+                  width: 300,
+                  height: 300,
+                  fit: BoxFit.cover,
+                ),
+              )
+            else if (_imageFile != null && !kIsWeb)
               ClipRRect(
                 borderRadius: BorderRadius.circular(10),
                 child: Image.file(
