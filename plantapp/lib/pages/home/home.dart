@@ -265,15 +265,14 @@ class _HomeState extends State<Home> {
                     ),
                   ),
                 ),
-                // Tiêu đề dưới bể nước
-                SizedBox(height: 10),  // Khoảng cách giữa bể và tiêu đề
-                Center(  // Căn giữa tiêu đề
+                SizedBox(height: 10),
+                Center( 
                   child: Text(
-                    "Tank Level",  // Tiêu đề của biểu đồ
+                    "Tank Level",
                     style: TextStyle(
-                      fontSize: 16,  // Kích thước chữ nhỏ hơn
-                      fontWeight: FontWeight.normal,  // Giảm độ đậm của chữ
-                      color: const Color.fromARGB(255, 0, 0, 0),  // Màu chữ nhạt hơn
+                      fontSize: 16, 
+                      fontWeight: FontWeight.normal,
+                      color: const Color.fromARGB(255, 0, 0, 0),
                     ),
                   ),
                 )
