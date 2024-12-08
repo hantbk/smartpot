@@ -219,7 +219,6 @@ class _HomeState extends State<Home> {
                           height: _gardenData != null 
                                   ? (200* (_gardenData?['khoangCach']?['current'] / 1000)?? 0).toDouble() 
                                   : 0, // Nếu không có dữ liệu, đặt chiều cao là 0  // Mức nước thay đổi, có thể thay đổi động
-                          // height: 100,
                           duration: Duration(seconds: 1),
                           decoration: BoxDecoration(
                             color: const Color.fromARGB(255, 110, 169, 218),  // Màu nước xanh biển
@@ -265,14 +264,15 @@ class _HomeState extends State<Home> {
                     ),
                   ),
                 ),
-                SizedBox(height: 10),
-                Center( 
+                // Tiêu đề dưới bể nước
+                SizedBox(height: 10),  // Khoảng cách giữa bể và tiêu đề
+                Center(  // Căn giữa tiêu đề
                   child: Text(
-                    "Tank Level",
+                    "Tank Level",  // Tiêu đề của biểu đồ
                     style: TextStyle(
-                      fontSize: 16, 
-                      fontWeight: FontWeight.normal,
-                      color: const Color.fromARGB(255, 0, 0, 0),
+                      fontSize: 16,  // Kích thước chữ nhỏ hơn
+                      fontWeight: FontWeight.normal,  // Giảm độ đậm của chữ
+                      color: const Color.fromARGB(255, 0, 0, 0),  // Màu chữ nhạt hơn
                     ),
                   ),
                 )
