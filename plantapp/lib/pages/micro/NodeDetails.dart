@@ -21,13 +21,13 @@ class _NodeDetailsState extends State<NodeDetails> {
   String sensedhumidity = "0";
   String sensedlight = "0";
   String sensedTankLevel = "0";
-  bool motor = false;
+  int motor = 0;
   final DatabaseReference _motorRef =
       FirebaseDatabase.instance.ref().child('gardenId1/mayBom');
 
-  motorSwitch() async {
+  motorSwitch(int valueStateOfMayBom) async {
     setState(() {
-      motor = !motor;
+      motor = valueStateOfMayBom;
       print(motor);
     });
     await _motorRef.set(motor);
@@ -233,79 +233,105 @@ class _NodeDetailsState extends State<NodeDetails> {
   }
 }
 
-Widget smartPlanting(VoidCallback motorSwitch, bool motor) {
-  return Column(children: [
-    Text(
-      "Smart Watering",
-      style: GoogleFonts.poppins(
-        height: 1,
-        color: Colors.black,
-        fontWeight: FontWeight.w600, // Different font weight
-        fontSize: 20, // Same font size, or adjust as needed
-      ),
-    ),
-    SizedBox(
-      height: 70,
-    ),
-    SizedBox(
-      width: 180,
-      child: CustomSemicircularIndicator(
-        radius: 100,
-        progress: 0.75, // Set the progress value here
-        color: Color.fromRGBO(151, 203, 104, 1),
-        backgroundColor: Color.fromRGBO(0, 100, 53, 1),
-        strokeWidth: 25,
-        child: Column(
-          children: [
-            Text(
-              '${(0.75 * 100).toInt()}%',
-              style: GoogleFonts.poppins(
-                fontSize: 35,
-                fontWeight: FontWeight.w800,
-                color: Color.fromRGBO(0, 100, 53, 1),
-                height: 0.7,
-              ),
-            ),
-            Text(
-              'Soil Moisture',
-              style: GoogleFonts.poppins(
-                  fontSize: 15,
-                  fontWeight: FontWeight.w400,
-                  color: Colors.black),
-            ),
-          ],
-        ),
-      ),
-    ),
-    SizedBox(
-      height: 25,
-    ),
-    GestureDetector(
-      onTap: motorSwitch,
-      child: Container(
-        width: 200,
-        decoration: BoxDecoration(
-          color: motor ? Colors.red : Color.fromRGBO(203, 203, 203, 1),
-          borderRadius: BorderRadius.circular(10),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Center(
-            child: Text(
-              motor ? "Motor On" : "Motor Off",
-              style: GoogleFonts.poppins(
-                fontSize: 20,
-                color: motor ? Colors.white : Colors.black,
-                fontWeight: motor ? FontWeight.w800 : FontWeight.w400,
-              ),
-            ),
-          ),
-        ),
-      ),
-    )
-    // IrrigationContainer()
-  ]);
-}
+// Widget smartPlanting(VoidCallback motorSwitch, int motor, VoidCallback motorSwitch1, int motor1) {
+//   return Column(children: [
+//     Text(
+//       "Smart Watering",
+//       style: GoogleFonts.poppins(
+//         height: 1,
+//         color: Colors.black,
+//         fontWeight: FontWeight.w600, // Different font weight
+//         fontSize: 20, // Same font size, or adjust as needed
+//       ),
+//     ),
+//     SizedBox(
+//       height: 70,
+//     ),
+//     SizedBox(
+//       width: 180,
+//       child: CustomSemicircularIndicator(
+//         radius: 100,
+//         progress: 0.75, // Set the progress value here
+//         color: Color.fromRGBO(151, 203, 104, 1),
+//         backgroundColor: Color.fromRGBO(0, 100, 53, 1),
+//         strokeWidth: 25,
+//         child: Column(
+//           children: [
+//             Text(
+//               '${(0.75 * 100).toInt()}%',
+//               style: GoogleFonts.poppins(
+//                 fontSize: 35,
+//                 fontWeight: FontWeight.w800,
+//                 color: Color.fromRGBO(0, 100, 53, 1),
+//                 height: 0.7,
+//               ),
+//             ),
+//             Text(
+//               'Soil Moisture',
+//               style: GoogleFonts.poppins(
+//                   fontSize: 15,
+//                   fontWeight: FontWeight.w400,
+//                   color: Colors.black),
+//             ),
+//           ],
+//         ),
+//       ),
+//     ),
+//     SizedBox(
+//       height: 25,
+//     ),
+//     GestureDetector(
+//       onTap: motorSwitch,
+//       child: Container(
+//         width: 200,
+//         decoration: BoxDecoration(
+//           color: motor == 1 ? Colors.red : Color.fromRGBO(203, 203, 203, 1),
+//           borderRadius: BorderRadius.circular(10),
+//         ),
+//         child: Padding(
+//           padding: const EdgeInsets.all(8.0),
+//           child: Center(
+//             child: Text(
+//               motor == 1 ? "Manual On" : "Manual Off",
+//               style: GoogleFonts.poppins(
+//                 fontSize: 20,
+//                 color: motor == 1 ? Colors.white : Colors.black,
+//                 fontWeight: motor == 1 ? FontWeight.w800 : FontWeight.w400,
+//               ),
+//             ),
+//           ),
+//         ),
+//       ),
+//     ),
+//     SizedBox(height: 25), // Khoảng cách giữa 2 nút
+//     GestureDetector(
+//       onTap: () {
+//         // Không cần setState hoặc hành động gì, chỉ cần UI
+//       },
+//       child: Container(
+//         width: 200,
+//         decoration: BoxDecoration(
+//           color: Color.fromRGBO(203, 203, 203, 1),
+//           borderRadius: BorderRadius.circular(10),
+//         ),
+//         child: Padding(
+//           padding: const EdgeInsets.all(8.0),
+//           child: Center(
+//             child: Text(
+//               "Manual Off", // Hoặc "Manual On" tùy theo yêu cầu của bạn
+//               style: GoogleFonts.poppins(
+//                 fontSize: 20,
+//                 color: Colors.black,
+//                 fontWeight: FontWeight.w400,
+//               ),
+//             ),
+//           ),
+//         ),
+//       ),
+//     ),
+//     // IrrigationContainer()
+//   ]);
+// }
 
 void showInformation(BuildContext context, int plantId) {
   // Tìm kiếm cây dựa trên id
