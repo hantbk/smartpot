@@ -4,8 +4,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:plantapp/pages/micro/semicircle_indicator.dart';
 
 class SmartPlanting extends StatefulWidget {
-  final VoidCallback motorSwitch;
-  final bool motor;
+  final Function(int) motorSwitch;
+  final int motor;
 
   const SmartPlanting(
       {super.key, required this.motorSwitch, required this.motor});
@@ -84,30 +84,61 @@ class _SmartPlantingState extends State<SmartPlanting> {
         ),
         SizedBox(height: 25),
         GestureDetector(
-          onTap: widget.motorSwitch,
+          onTap: () {
+            widget.motorSwitch(widget.motor == 1 ? 0 : 1);  // Truyền giá trị 1 hoặc 0 khi click
+          },
           child: Container(
             width: 200,
             decoration: BoxDecoration(
               color:
-                  widget.motor ? Colors.red : Color.fromRGBO(203, 203, 203, 1),
+                  widget.motor == 1  ? Colors.red : Color.fromRGBO(203, 203, 203, 1),
               borderRadius: BorderRadius.circular(10),
             ),
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: Center(
                 child: Text(
-                  widget.motor ? "Motor On" : "Motor Off",
+                  widget.motor == 1 ? "Manual On" : "Manual Off" ,
                   style: GoogleFonts.poppins(
                     fontSize: 20,
-                    color: widget.motor ? Colors.white : Colors.black,
+                    color: widget.motor == 1 ? Colors.white : Colors.black,
                     fontWeight:
-                        widget.motor ? FontWeight.w800 : FontWeight.w400,
+                        widget.motor == 1 ? FontWeight.w800 : FontWeight.w400,
                   ),
                 ),
               ),
             ),
           ),
         ),
+        SizedBox(height: 25),
+        GestureDetector(
+          onTap: () {
+            widget.motorSwitch(widget.motor == 21 ? 20 : 21);  // Truyền giá trị 1 hoặc 0 khi click
+          },
+          child: Container(
+            width: 200,
+            decoration: BoxDecoration(
+              color:
+                  widget.motor == 21  ? Color.fromRGBO(74, 173, 82, 1) : Color.fromRGBO(203, 203, 203, 1),
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Center(
+                child: Text(
+                  widget.motor == 21 ? "Auto On" : "Auto Off" ,
+                  style: GoogleFonts.poppins(
+                    fontSize: 20,
+                    color: widget.motor == 21 ? Colors.white : Colors.black,
+                    fontWeight:
+                        widget.motor == 21 ? FontWeight.w800 : FontWeight.w400,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+        SizedBox(height: 25),
       ],
     );
   }
