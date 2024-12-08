@@ -16,14 +16,15 @@ class UserLogin extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         iconTheme: IconThemeData(
-          color: Colors.white, // This sets the color of the leading icon to white
+          color:
+              Colors.white, // This sets the color of the leading icon to white
         ),
         title: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Row(
             children: [
               Text(
-                "Smart Planting System",
+                "Smart Pot",
                 style: GoogleFonts.poppins(
                   color: Colors.white,
                   fontWeight: FontWeight.w600,
@@ -53,10 +54,11 @@ class UserLogin extends StatelessWidget {
             SizedBox(
               width: 200,
               height: 200,
-              child: Image.asset("lib/images/leaf.png"), // Đảm bảo bạn đã có logo trong thư mục 'assets/images'
+              child: Image.asset(
+                  "lib/images/leaf.png"), // Đảm bảo bạn đã có logo trong thư mục 'assets/images'
             ),
             SizedBox(height: 20), // Add some spacing between logo and the title
-            
+
             // Title
             Text(
               "Welcome to Smart Planting!",
@@ -66,7 +68,8 @@ class UserLogin extends StatelessWidget {
                 fontSize: 30,
               ),
             ),
-            SizedBox(height: 20), // Add some spacing between the title and fields
+            SizedBox(
+                height: 20), // Add some spacing between the title and fields
 
             // Username Field
             TextField(
@@ -82,7 +85,8 @@ class UserLogin extends StatelessWidget {
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(15.0),
-                  borderSide: BorderSide(color: Color.fromRGBO(161, 207, 107, 1)),
+                  borderSide:
+                      BorderSide(color: Color.fromRGBO(161, 207, 107, 1)),
                 ),
               ),
             ),
@@ -102,7 +106,8 @@ class UserLogin extends StatelessWidget {
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(15.0),
-                  borderSide: BorderSide(color: Color.fromRGBO(161, 207, 107, 1)),
+                  borderSide:
+                      BorderSide(color: Color.fromRGBO(161, 207, 107, 1)),
                 ),
               ),
             ),

@@ -26,7 +26,7 @@ class StartPage extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "Smart Planting System",
+                        "Smart Pot",
                         style: GoogleFonts.poppins(
                           color: Colors.black,
                           fontWeight: FontWeight.w900,

@@ -19,7 +19,7 @@ class MacroPage extends StatelessWidget {
               child: Row(
                 children: [
                   Text(
-                    "Smart Planting System",
+                    "Smart Pot",
                     style: GoogleFonts.poppins(
                         color: Colors.white,
                         fontWeight: FontWeight.w600,
