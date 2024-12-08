@@ -25,10 +25,10 @@ List<Plant> plants = [
   Plant(
     id: 1,
     name: "Cây Kim Tiền",
-    imageUrl: "lib/images/cay-kim-tien.jpg",
+    imageUrl: "lib/images/cay-kim-tien.jpeg",
     description: "Cây Kim Tiền là loài cây dễ chăm sóc và mang lại may mắn.",
     temperatureAdvice: "Nhiệt độ lý tưởng: 18-25°C.",
-    soilMoistureAdvice: "Độ ẩm đất: Giữ ẩm vừa phải, không để đất quá ướt.",
+    soilMoistureAdvice: "Giữ ẩm vừa phải, không để đất quá ướt.",
     wateringCycleAdvice: "2-3 lần mỗi tuần.",
     lightAdvice:
         "Cây cần ánh sáng gián tiếp, tránh ánh sáng trực tiếp quá mạnh.",
@@ -46,7 +46,7 @@ List<Plant> plants = [
   Plant(
     id: 3,
     name: "Cây Lưỡi Hổ",
-    imageUrl: "lib/images/cay-luoi-ho.jpg",
+    imageUrl: "lib/images/cay-luoi-ho.jpeg",
     description:
         "Cây Lưỡi Hổ có khả năng thanh lọc không khí và rất dễ chăm sóc.",
     temperatureAdvice: "Nhiệt độ lý tưởng: 18-27°C.",

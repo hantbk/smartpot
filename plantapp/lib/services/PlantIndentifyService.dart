@@ -26,7 +26,7 @@ class PlantIdentifyService {
 
     if (response.statusCode == 201) {
       final responseBody = await response.stream.bytesToString();
-      print('Response: $responseBody');
+      //print('Response: $responseBody');
       return responseBody;
     } else {
       print('Error in service: ${response.reasonPhrase}');
