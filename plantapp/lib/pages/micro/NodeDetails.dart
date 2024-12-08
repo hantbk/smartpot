@@ -38,8 +38,7 @@ class _NodeDetailsState extends State<NodeDetails> {
     return Scaffold(
       appBar: AppBar(
         iconTheme: const IconThemeData(
-          color:
-              Colors.white, // This sets the color of the leading icon to white
+          color: Colors.white,
         ),
         title: Padding(
           padding: const EdgeInsets.all(8.0),

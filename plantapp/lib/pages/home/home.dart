@@ -4,13 +4,47 @@ import 'package:plantapp/pages/home/homebuttons.dart';
 import 'package:plantapp/pages/macro/MacroDetails.dart';
 import 'package:plantapp/pages/micro/MicroDetails.dart';
 import 'package:plantapp/pages/home/weather.dart';
-import 'package:plantapp/pages/user/profile.dart';
-import 'package:provider/provider.dart';
-import '../../userdets.dart';
 
-class Home extends StatelessWidget {
+class Home extends StatefulWidget {
   const Home({super.key});
+  @override
+  State<Home> createState() => _HomeState();
+}
 
+class _HomeState extends State<Home> {
+
+  final DatabaseReference _gardenRef = FirebaseDatabase.instance.ref().child('gardenId1');
+  Map<String, dynamic>? _gardenData;
+
+   @override
+  void initState() {
+    super.initState();
+    _listenToGardenData(); // Start listening to database changes
+  }
+
+  void _listenToGardenData() {
+    _gardenRef.onValue.listen((event) {
+      if (event.snapshot.exists) {
+        setState(() {
+          _gardenData = Map<String, dynamic>.from(
+            event.snapshot.value as Map<dynamic, dynamic>,
+          );
+        });
+      } else {
+        print("No garden data found in Firebase");
+        setState(() {
+          _gardenData = null; // Clear the data if the snapshot is empty
+        });
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _gardenRef.onDisconnect(); // Stop listening to changes when the widget is disposed
+    super.dispose();
+  }
+    
   @override
   Widget build(BuildContext context) {
     String username = Provider.of<UserInfo>(context, listen: false).name;
@@ -120,7 +154,7 @@ class Home extends StatelessWidget {
                     MaterialPageRoute(builder: (context) => const MacroPage()),
                   );
                 },
-                child: ButtonsHome(
+                child: const ButtonsHome(
                   imgpath: "lib/images/tank.jpg",
                   heading: "Water Tank",
                 )),
