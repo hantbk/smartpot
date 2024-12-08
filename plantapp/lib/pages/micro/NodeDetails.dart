@@ -87,7 +87,7 @@ class _NodeDetailsState extends State<NodeDetails> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    "Pot ${selectedPlant.id} details",
+                    "Pot details",
                     style: GoogleFonts.poppins(
                         color: Colors.black,
                         fontWeight: FontWeight.w700,
