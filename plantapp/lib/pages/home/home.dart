@@ -53,6 +53,8 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
+    String username = Provider.of<UserInfo>(context, listen: false).name;
+    String location = Provider.of<UserInfo>(context, listen: false).location;
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
@@ -71,13 +73,20 @@ class _HomeState extends State<Home> {
           ),
         ),
         backgroundColor: const Color.fromRGBO(161, 207, 107, 1),
-        actions: const [
+        actions: [
           Padding(
             padding: EdgeInsets.all(15.0),
-            child: Icon(
-              Icons.person,
-              color: Colors.white,
-            ),
+            child: GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => ProfilePage()),
+                  );
+                },
+                child: Icon(
+                  Icons.person,
+                  color: Colors.white,
+                )),
           )
         ],
       ),
