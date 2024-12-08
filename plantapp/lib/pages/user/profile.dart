@@ -17,7 +17,8 @@ class ProfilePage extends StatelessWidget {
       extendBodyBehindAppBar: true,
       appBar: AppBar(
         iconTheme: IconThemeData(
-          color: Colors.white, // This sets the color of the leading icon to white
+          color:
+              Colors.white, // This sets the color of the leading icon to white
         ),
         title: Padding(
           padding: const EdgeInsets.all(8.0),
@@ -90,14 +91,14 @@ class ProfilePage extends StatelessWidget {
                   ],
                 ),
               ),
-
             ],
           ),
           Padding(
             padding: const EdgeInsets.all(20.0),
             child: CircleAvatar(
               radius: 60, // Adjust size as needed
-              backgroundColor: Colors.grey[300], // Default profile picture color
+              backgroundColor:
+                  Colors.grey[300], // Default profile picture color
               child: Icon(
                 Icons.person,
                 size: 100, // Adjust size as needed
@@ -105,21 +106,28 @@ class ProfilePage extends StatelessWidget {
               ),
             ),
           ),
-          ListTile(
-            leading: Icon(Icons.person),
-            title: Text("Name"),
-            subtitle: Text(username), // Display name from UserInfo
-          ),
-          ListTile(
-            leading: Icon(Icons.location_on),
-            title: Text("Location"),
-            subtitle: Text(location), // Display location from UserInfo
-          ),
-          ListTile(
-            leading: Icon(Icons.eco),
-            title: Text("Plant"),
-            subtitle: Text(plant), // Display plant from UserInfo
-          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: Wrap(
+              children: [
+                ListTile(
+                  leading: Icon(Icons.person),
+                  title: Text("Username"),
+                  subtitle: Text(username), // Display name from UserInfo
+                ),
+                ListTile(
+                  leading: Icon(Icons.location_on),
+                  title: Text("Location"),
+                  subtitle: Text(location), // Display location from UserInfo
+                ),
+                ListTile(
+                  leading: Icon(Icons.eco),
+                  title: Text("Plant"),
+                  subtitle: Text(plant), // Display plant from UserInfo
+                ),
+              ],
+            ),
+          )
         ],
       ),
     );
