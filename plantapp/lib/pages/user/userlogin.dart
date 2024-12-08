@@ -61,7 +61,7 @@ class UserLogin extends StatelessWidget {
 
             // Title
             Text(
-              "Welcome to Smart Planting!",
+              "Welcome to Smart Pot!",
               style: GoogleFonts.poppins(
                 color: Colors.black,
                 fontWeight: FontWeight.w700,

@@ -15,7 +15,6 @@ class _MicroPageState extends State<MicroPage> {
   List<Map<String, dynamic>> pots = [
     {"name": "Pot 1", "plant": plants[0]},
     {"name": "Pot 2", "plant": plants[1]},
-    {"name": "Pot 3", "plant": plants[2]},
   ];
 
   void _addPot(String name, Plant plant) {
