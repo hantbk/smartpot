@@ -5,6 +5,7 @@ import 'package:plantapp/pages/home/homebuttons.dart';
 import 'package:plantapp/pages/macro/MacroDetails.dart';
 import 'package:plantapp/pages/micro/MicroDetails.dart';
 import 'package:plantapp/pages/home/weather.dart';
+import 'package:plantapp/pages/news/home_news.dart';
 import 'package:plantapp/pages/user/profile.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:provider/provider.dart';
@@ -199,13 +200,12 @@ class _HomeState extends State<Home> {
                             borderRadius: BorderRadius.circular(20),
                           ),
                         ),
-                        // Nước trong bể, chiều cao thay đổi
                         AnimatedContainer(
                           width: double
                               .infinity, // Chiếm toàn bộ chiều rộng của bể
-                          height: _gardenData != null
-                              ? (200 *(1 -(_gardenData?['khoangCach']?['current'] ?? 0) / 50)).toDouble()
-                              : 0, // Nếu không có dữ liệu, đặt chiều cao là 0
+                              height: _gardenData != null
+                                  ? (200 * (1 - (_gardenData?['khoangCach']?['current'] ?? 0) / 50)).toDouble().clamp(0.0, double.infinity)
+                                  : 0, // Nếu không có dữ liệu, đặt chiều cao là 0
                           duration: Duration(seconds: 1),
                           decoration: BoxDecoration(
                             color: const Color.fromARGB(255, 110, 169, 218), // Màu nước
@@ -217,7 +217,7 @@ class _HomeState extends State<Home> {
                           right: 10, // Vị trí Text bên phải bể
                           child: Text(
                             _gardenData != null
-                                ? "${((1 - (_gardenData?['khoangCach']?['current'] ?? 0) / 50) * 100).toInt()}%"
+                                ? "${((1 - (_gardenData?['khoangCach']?['current'] ?? 0) / 50) * 100).toInt().clamp(0, 100)}%" // Giới hạn phần trăm từ 0 đến 100
                                 : "0%", // Nếu không có dữ liệu, hiển thị 0%
                             style: TextStyle(
                               color: Colors.black,
@@ -303,6 +303,20 @@ class _HomeState extends State<Home> {
                 child: const ButtonsHome(
                   imgpath: "lib/images/iot.jpeg",
                   heading: "In Ground Sensors",
+                )),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 8),
+            child: GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const HomeNewsPage()),
+                  );
+                },
+                child: const ButtonsHome(
+                  imgpath: "lib/images/news.jpg",
+                  heading: "News",
                 )),
           ),
         ],
