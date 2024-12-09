@@ -47,6 +47,9 @@ dependencies:
   cupertino_icons: ^1.0.8
   flutter_dotenv: ^5.2.1
   fl_chart: 0.69.2   # Thêm thư viện fl_chart
+  intl: ^0.18.0
+  flutter_bloc: ^8.0.0  # Đảm bảo rằng bạn đang sử dụng phiên bản tương thích
+  url_launcher: ^6.3.1  # Hoặc phiên bản mới nhất
 
 dev_dependencies:
   flutter_test:
