@@ -8,6 +8,9 @@ class Plant {
   final String soilMoistureAdvice;
   final String wateringCycleAdvice;
   final String lightAdvice;
+  int minHumidity = 0;
+  int maxHumidity = 0;
+  final String potId;
 
   Plant({
     required this.id,
@@ -18,6 +21,9 @@ class Plant {
     required this.soilMoistureAdvice,
     required this.wateringCycleAdvice,
     required this.lightAdvice,
+    required this.minHumidity,
+    required this.maxHumidity,
+    required this.potId,
   });
 }
 
@@ -33,6 +39,9 @@ List<Plant> plants = [
     wateringCycleAdvice: "2-3 lần mỗi tuần.",
     lightAdvice:
         "Cây cần ánh sáng gián tiếp, tránh ánh sáng trực tiếp quá mạnh.",
+    minHumidity: 30,
+    maxHumidity: 80,
+    potId: "gardenId1",
   ),
   Plant(
     id: 2,
@@ -44,6 +53,9 @@ List<Plant> plants = [
     soilMoistureAdvice: "Đảm bảo đất ẩm, nhưng không quá ướt.",
     wateringCycleAdvice: "Mỗi tuần 1-2 lần.",
     lightAdvice: "Cây thích ánh sáng nhẹ, tránh nắng gắt.",
+    minHumidity: 30,
+    maxHumidity: 80,
+    potId: "gardenId2",
   ),
   Plant(
     id: 3,
@@ -55,6 +67,9 @@ List<Plant> plants = [
     soilMoistureAdvice: "Để đất khô hoàn toàn giữa các lần tưới.",
     wateringCycleAdvice: "1-2 lần mỗi tuần.",
     lightAdvice: "Ánh sáng gián tiếp hoặc ánh sáng yếu.",
+    minHumidity: 30,
+    maxHumidity: 80,
+    potId: "gardenId2",
   ),
   Plant(
     id: 4,
@@ -66,6 +81,9 @@ List<Plant> plants = [
     soilMoistureAdvice: "Giữ đất ẩm, không để quá ướt.",
     wateringCycleAdvice: "Mỗi tuần 1 lần.",
     lightAdvice: "Cây thích ánh sáng gián tiếp.",
+    minHumidity: 30,
+    maxHumidity: 80,
+    potId: "gardenId2",
   ),
   Plant(
     id: 5,
@@ -78,6 +96,9 @@ List<Plant> plants = [
     wateringCycleAdvice: "2-3 lần mỗi tuần.",
     lightAdvice:
         "Cây ưa ánh sáng tự nhiên nhưng không trực tiếp, phù hợp với ánh sáng nhẹ trong nhà.",
+    minHumidity: 30,
+    maxHumidity: 80,
+    potId: "gardenId2",
   ),
   Plant(
     id: 6,
@@ -89,6 +110,9 @@ List<Plant> plants = [
     soilMoistureAdvice: "Để đất khô vừa phải giữa các lần tưới.",
     wateringCycleAdvice: "1-2 lần mỗi tuần.",
     lightAdvice: "Cây cần ánh sáng gián tiếp, tránh ánh sáng mạnh.",
+    minHumidity: 30,
+    maxHumidity: 80,
+    potId: "gardenId2",
   ),
   Plant(
     id: 7,
@@ -101,6 +125,9 @@ List<Plant> plants = [
     wateringCycleAdvice:
         "2 lần mỗi tuần vào mùa hè, 1 lần mỗi tuần vào mùa đông.",
     lightAdvice: "Cây ưa ánh sáng nhẹ buổi sáng, tránh ánh nắng gắt.",
+    minHumidity: 30,
+    maxHumidity: 80,
+    potId: "gardenId2",
   ),
   Plant(
     id: 8,
@@ -113,6 +140,9 @@ List<Plant> plants = [
     wateringCycleAdvice: "1-2 lần mỗi tuần.",
     lightAdvice:
         "Cây cần ánh sáng tự nhiên, tránh ánh sáng trực tiếp quá mạnh.",
+    minHumidity: 30,
+    maxHumidity: 80,
+    potId: "gardenId2",
   ),
   Plant(
     id: 9,
@@ -124,6 +154,9 @@ List<Plant> plants = [
     soilMoistureAdvice: "Giữ đất ẩm, không để khô lâu ngày.",
     wateringCycleAdvice: "2-3 lần mỗi tuần, tùy vào độ ẩm không khí.",
     lightAdvice: "Cây ưa ánh sáng nhẹ và bóng râm.",
+    minHumidity: 30,
+    potId: "gardenId2",
+    maxHumidity: 80,
   ),
   Plant(
     id: 10,
@@ -135,5 +168,8 @@ List<Plant> plants = [
     soilMoistureAdvice: "Giữ đất khô giữa các lần tưới, không để úng nước.",
     wateringCycleAdvice: "1 lần mỗi tuần, tùy thuộc vào độ ẩm không khí.",
     lightAdvice: "Cây thích ánh sáng tự nhiên, có thể chịu bóng râm.",
+    minHumidity: 30,
+    potId: "gardenId2",
+    maxHumidity: 80,
   ),
 ];

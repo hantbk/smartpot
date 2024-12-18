@@ -18,11 +18,14 @@ class NodeDetails extends StatefulWidget {
 
 class _NodeDetailsState extends State<NodeDetails> {
   late Plant selectedPlant;
+  late DatabaseReference _motorRef;
 
   @override
   void initState() {
     super.initState();
     selectedPlant = widget.plant;
+    _motorRef =
+        FirebaseDatabase.instance.ref().child('${selectedPlant.potId}/mayBom');
   }
 
   final Future<FirebaseApp> _fApp = Firebase.initializeApp();
@@ -31,8 +34,6 @@ class _NodeDetailsState extends State<NodeDetails> {
   String sensedlight = "0";
   String sensedTankLevel = "0";
   int motor = 0;
-  final DatabaseReference _motorRef =
-      FirebaseDatabase.instance.ref().child('gardenId1/mayBom');
 
   motorSwitch(int valueStateOfMayBom) async {
     setState(() {
@@ -181,7 +182,10 @@ class _NodeDetailsState extends State<NodeDetails> {
                   ),
                 )),
             const SizedBox(height: 40),
-            SmartPlanting(motorSwitch: motorSwitch, motor: motor),
+            SmartPlanting(
+                motorSwitch: motorSwitch,
+                motor: motor,
+                selectedPlant: selectedPlant),
           ],
         ),
       ),
@@ -190,20 +194,26 @@ class _NodeDetailsState extends State<NodeDetails> {
 
   Widget sensorcontent() {
     const double tankHeight = 100.0;
-    Query _tempRef =
-        FirebaseDatabase.instance.ref().child("gardenId1/dhtNhietDo");
+
+    Query _tempRef = FirebaseDatabase.instance
+        .ref()
+        .child("${selectedPlant.potId}/dhtNhietDo");
+
     Query _humidityRef =
-        FirebaseDatabase.instance.ref().child("gardenId1/dhtDoAm");
+        FirebaseDatabase.instance.ref().child("${selectedPlant.potId}/dhtDoAm");
+
     Query _lightRef =
-        FirebaseDatabase.instance.ref().child("gardenId1/anhSang");
-    Query _tankRef =
-        FirebaseDatabase.instance.ref().child("gardenId1/khoangCach");
+        FirebaseDatabase.instance.ref().child("${selectedPlant.potId}/anhSang");
+
+    Query _tankRef = FirebaseDatabase.instance
+        .ref()
+        .child("${selectedPlant.potId}/khoangCach");
 
     // Listen for changes in humidity
     _humidityRef.onValue.listen((event) {
       setState(() {
-        final rawData =
-            event.snapshot.value.toString(); // Example: "{current: 32.9}"
+        final rawData = event.snapshot.value
+            .toString(); // Example: "{current: 32.9, min: 30.0, max: 80.0}"
         final parsedValue = double.tryParse(
             rawData.replaceAll(RegExp(r'[^\d.]'), '')); // Extracts: "32.9"
         sensedhumidity = parsedValue?.toStringAsFixed(1) ?? ""; // Safely assign
