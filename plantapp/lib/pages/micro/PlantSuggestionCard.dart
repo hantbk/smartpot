@@ -9,7 +9,7 @@ class PlantSuggestionCard extends StatelessWidget {
   final String bestSoilType;
   final String bestWatering;
 
-  PlantSuggestionCard(PlantSuggestion suggestion)
+  PlantSuggestionCard(PlantSuggestion suggestion, {super.key})
       : name = suggestion.name,
         similarImageUrl = suggestion.urlImage,
         description = suggestion.description,

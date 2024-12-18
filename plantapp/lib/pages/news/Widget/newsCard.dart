@@ -6,18 +6,15 @@ class NewsCard extends StatelessWidget {
   final Article article;
 
   // Nhận vào bài viết Article để hiển thị
-  const NewsCard({Key? key, required this.article}) : super(key: key);
+  const NewsCard({super.key, required this.article});
 
-  void _launchURL(String url) async {
-    final Uri _url = Uri.parse(url); // Chuyển đổi String thành Uri
-    print("Attempting to launch URL: $_url"); // Debug: In URL trước khi mở
-    if (await canLaunchUrl(_url)) {
-      print("xin chao");
-      await launchUrl(_url); // Mở URL
-    } else {
-      print('Could not launch $url'); // Thông báo nếu không mở được URL
+  _launchURL(String _url) async {
+    final Uri url = Uri.parse(_url); // Sử dụng _url được truyền vào
+    if (!await launchUrl(url)) {
+      throw Exception('Could not launch $_url');
     }
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -28,9 +25,10 @@ class NewsCard extends StatelessWidget {
       elevation: 4,
       child: InkWell(
         onTap: () {
-          // Mở URL khi người dùng nhấn vào
           if (article.url != null && article.url!.isNotEmpty) {
-            _launchURL(article.url!);  // Mở link trong trình duyệt
+            _launchURL(article.url!); // Mở link trong trình duyệt
+          } else {
+            print('URL không hợp lệ hoặc rỗng.');
           }
         },
         child: Column(

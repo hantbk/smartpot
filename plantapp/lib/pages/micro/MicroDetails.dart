@@ -176,7 +176,7 @@ class _MicroPageState extends State<MicroPage> {
                 ),
               ),
             );
-          }).toList(),
+          }),
         ],
       ),
     );
