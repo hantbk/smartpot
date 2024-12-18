@@ -11,7 +11,7 @@ class PlantHealthCareSuggestionCard extends StatelessWidget {
   final List<String> treatmentBiological;
   final List<String> treatmentPrevention;
 
-  PlantHealthCareSuggestionCard(PlantHealthCareSuggestion suggestion)
+  PlantHealthCareSuggestionCard(PlantHealthCareSuggestion suggestion, {super.key})
       : name = suggestion.name,
         probability = suggestion.probability,
         similarImageUrl = suggestion.urlImage,
