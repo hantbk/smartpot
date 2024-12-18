@@ -1,3 +1,4 @@
+// ignore: file_names
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -15,8 +16,8 @@ class PlantIdentifyService {
       "longitude": 16.608,
       "similar_images": true,
     });
-    final api_url = dotenv.env['PLANTID_API_URL'] ?? '';
-    final url = Uri.parse("$api_url$path");
+    final apiUrl = dotenv.env['PLANTID_API_URL'] ?? '';
+    final url = Uri.parse("$apiUrl$path");
     final request = http.Request('POST', url);
     request.headers.addAll(headers);
     request.body = requestBody;
@@ -28,7 +29,7 @@ class PlantIdentifyService {
       //print('Response: $responseBody');
       return responseBody;
     } else {
-      print('Error in service: ${response.reasonPhrase}');
+      // print('Error in service: ${response.reasonPhrase}');
       return null;
     }
   }

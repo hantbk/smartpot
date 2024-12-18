@@ -1,3 +1,4 @@
+// ignore: file_names
 class PlantSuggestion {
   final String name;
   final String urlImage;

@@ -1,8 +1,6 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:plantapp/pages/news/Widget/newsCard.dart';
 import 'package:plantapp/services/NewsService.dart';
-import 'package:provider/provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:plantapp/pages/models/News.dart';  // Import model Article và NewsApiResponse
 
@@ -10,6 +8,7 @@ class HomeNewsPage extends StatefulWidget {
   const HomeNewsPage({super.key});
 
   @override
+  // ignore: library_private_types_in_public_api
   _HomeNewsPageState createState() => _HomeNewsPageState();
 }
 
