@@ -24,7 +24,7 @@ class UserLogin extends StatelessWidget {
           child: Row(
             children: [
               Text(
-                "Smart Pot",
+                "Smart Garden",
                 style: GoogleFonts.poppins(
                   color: Colors.white,
                   fontWeight: FontWeight.w600,
@@ -61,7 +61,7 @@ class UserLogin extends StatelessWidget {
 
             // Title
             Text(
-              "Welcome to Smart Pot!",
+              "Welcome to Smart Garden!",
               style: GoogleFonts.poppins(
                 color: Colors.black,
                 fontWeight: FontWeight.w700,

@@ -55,7 +55,7 @@ class _NodeDetailsState extends State<NodeDetails> {
           child: Row(
             children: [
               Text(
-                "Smart Pot",
+                "Smart Garden",
                 style: GoogleFonts.poppins(
                     color: Colors.white,
                     fontWeight: FontWeight.w600,

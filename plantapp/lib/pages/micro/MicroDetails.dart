@@ -54,7 +54,7 @@ class _MicroPageState extends State<MicroPage> {
           child: Row(
             children: [
               Text(
-                "Smart Pot",
+                "Smart Garden",
                 style: GoogleFonts.poppins(
                   color: Colors.white,
                   fontWeight: FontWeight.w600,
