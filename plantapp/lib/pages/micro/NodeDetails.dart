@@ -7,6 +7,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:plantapp/pages/PlantIndentifyPage.dart';
 import 'package:plantapp/pages/models/Plant.dart';
 import 'package:plantapp/pages/micro/SmartPlanting.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class NodeDetails extends StatefulWidget {
   final Plant plant;
@@ -193,7 +194,7 @@ class _NodeDetailsState extends State<NodeDetails> {
   }
 
   Widget sensorcontent() {
-    const double tankHeight = 100.0;
+    final double tankHeight = double.parse(dotenv.env['TANK_HEIGHT'] ?? '19.0');
 
     Query _tempRef = FirebaseDatabase.instance
         .ref()
