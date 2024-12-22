@@ -13,7 +13,6 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-
   // Load environment variables
   await dotenv.load(fileName: "assets/env/.env");
 

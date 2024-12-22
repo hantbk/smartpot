@@ -10,6 +10,8 @@ class Plant {
   final String lightAdvice;
   int minHumidity = 0;
   int maxHumidity = 0;
+  int minTemp = 0;
+  int maxTemp = 100;
   final String potId;
 
   Plant({
@@ -24,6 +26,8 @@ class Plant {
     required this.minHumidity,
     required this.maxHumidity,
     required this.potId,
+    required this.minTemp,
+    required this.maxTemp,
   });
 }
 
@@ -34,7 +38,7 @@ List<Plant> plants = [
     imageUrl: "lib/images/cay-kim-tien.jpeg",
     description:
         "Cây Kim Tiền là một trong những loài cây phong thủy phổ biến nhất, được biết đến với khả năng mang lại tài lộc, sự thịnh vượng và may mắn cho gia chủ. Với vẻ ngoài xanh mướt, thân cây mọng nước và lá hình bầu dục bóng bẩy, cây dễ chăm sóc và thích nghi tốt với nhiều điều kiện sống. Đặc biệt, cây thường được đặt trong phòng khách, văn phòng làm việc hoặc cửa hàng để tạo điểm nhấn xanh mát và thu hút vượng khí.",
-    temperatureAdvice: "Nhiệt độ lý tưởng: 18-25°C.",
+    temperatureAdvice: "Nhiệt độ lý tưởng: 18 - 25°C.",
     soilMoistureAdvice: "Giữ ẩm vừa phải, không để đất quá ướt.",
     wateringCycleAdvice: "2-3 lần mỗi tuần.",
     lightAdvice:
@@ -42,6 +46,8 @@ List<Plant> plants = [
     minHumidity: 30,
     maxHumidity: 80,
     potId: "gardenId1",
+    minTemp: 18,
+    maxTemp: 30,
   ),
   Plant(
     id: 2,
@@ -56,6 +62,8 @@ List<Plant> plants = [
     minHumidity: 30,
     maxHumidity: 80,
     potId: "gardenId2",
+    minTemp: 20,
+    maxTemp: 28,
   ),
   Plant(
     id: 3,
@@ -70,6 +78,8 @@ List<Plant> plants = [
     minHumidity: 30,
     maxHumidity: 80,
     potId: "gardenId2",
+    minTemp: 18,
+    maxTemp: 25,
   ),
   Plant(
     id: 4,
@@ -84,6 +94,8 @@ List<Plant> plants = [
     minHumidity: 30,
     maxHumidity: 80,
     potId: "gardenId2",
+    minTemp: 18,
+    maxTemp: 25,
   ),
   Plant(
     id: 5,
@@ -99,6 +111,8 @@ List<Plant> plants = [
     minHumidity: 30,
     maxHumidity: 80,
     potId: "gardenId2",
+    minTemp: 18,
+    maxTemp: 25,
   ),
   Plant(
     id: 6,
@@ -113,6 +127,8 @@ List<Plant> plants = [
     minHumidity: 30,
     maxHumidity: 80,
     potId: "gardenId2",
+    minTemp: 18,
+    maxTemp: 25,
   ),
   Plant(
     id: 7,
@@ -128,6 +144,8 @@ List<Plant> plants = [
     minHumidity: 30,
     maxHumidity: 80,
     potId: "gardenId2",
+    minTemp: 18,
+    maxTemp: 25,
   ),
   Plant(
     id: 8,
@@ -143,6 +161,8 @@ List<Plant> plants = [
     minHumidity: 30,
     maxHumidity: 80,
     potId: "gardenId2",
+    minTemp: 18,
+    maxTemp: 25,
   ),
   Plant(
     id: 9,
@@ -157,6 +177,8 @@ List<Plant> plants = [
     minHumidity: 30,
     potId: "gardenId2",
     maxHumidity: 80,
+    minTemp: 18,
+    maxTemp: 25,
   ),
   Plant(
     id: 10,
@@ -171,5 +193,7 @@ List<Plant> plants = [
     minHumidity: 30,
     potId: "gardenId2",
     maxHumidity: 80,
+    minTemp: 18,
+    maxTemp: 25,
   ),
 ];
