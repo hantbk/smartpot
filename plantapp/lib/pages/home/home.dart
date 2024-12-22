@@ -10,6 +10,7 @@ import 'package:plantapp/pages/user/profile.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:provider/provider.dart';
 import '../../userdets.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -21,6 +22,8 @@ class _HomeState extends State<Home> {
   final DatabaseReference _gardenRef =
       FirebaseDatabase.instance.ref().child('gardenId1');
   Map<String, dynamic>? _gardenData;
+
+  final double tankHeight = double.parse(dotenv.env['TANK_HEIGHT'] ?? '19.0');
 
   @override
   void initState() {
@@ -64,7 +67,7 @@ class _HomeState extends State<Home> {
           child: Row(
             children: [
               Text(
-                "Smart Pot",
+                "Smart Garden",
                 style: GoogleFonts.poppins(
                     color: Colors.white,
                     fontWeight: FontWeight.w600,
@@ -204,7 +207,7 @@ class _HomeState extends State<Home> {
                           width: double
                               .infinity, // Chiếm toàn bộ chiều rộng của bể
                               height: _gardenData != null
-                                  ? (200 * (1 - (_gardenData?['khoangCach']?['current'] ?? 0) / 50)).toDouble().clamp(0.0, double.infinity)
+                                  ? (200 * (1 - (_gardenData?['khoangCach']?['current'] ?? 0) / tankHeight)).toDouble().clamp(0.0, double.infinity)
                                   : 0, // Nếu không có dữ liệu, đặt chiều cao là 0
                           duration: Duration(seconds: 1),
                           decoration: BoxDecoration(
@@ -217,7 +220,7 @@ class _HomeState extends State<Home> {
                           right: 10, // Vị trí Text bên phải bể
                           child: Text(
                             _gardenData != null
-                                ? "${((1 - (_gardenData?['khoangCach']?['current'] ?? 0) / 50) * 100).toInt().clamp(0, 100)}%" // Giới hạn phần trăm từ 0 đến 100
+                                ? "${((1 - (_gardenData?['khoangCach']?['current'] ?? 0) / tankHeight) * 100).toInt().clamp(0, 100)}%" // Giới hạn phần trăm từ 0 đến 100
                                 : "0%", // Nếu không có dữ liệu, hiển thị 0%
                             style: TextStyle(
                               color: Colors.black,

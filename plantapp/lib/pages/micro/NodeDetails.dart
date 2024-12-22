@@ -7,6 +7,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:plantapp/pages/PlantIndentifyPage.dart';
 import 'package:plantapp/pages/models/Plant.dart';
 import 'package:plantapp/pages/micro/SmartPlanting.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class NodeDetails extends StatefulWidget {
   final Plant plant;
@@ -121,7 +122,8 @@ class _NodeDetailsState extends State<NodeDetails> {
 
     // Listen for changes in tank level
     _tankRef.onValue.listen((event) {
-      const double tankHeight = 100.0;
+      final double tankHeight =
+          double.parse(dotenv.env['TANK_HEIGHT'] ?? '19.0');
       setState(() {
         final rawData =
             event.snapshot.value.toString(); // Example: "{current: 50.0}"
@@ -150,7 +152,7 @@ class _NodeDetailsState extends State<NodeDetails> {
           child: Row(
             children: [
               Text(
-                "Smart Pot",
+                "Smart Garden",
                 style: GoogleFonts.poppins(
                     color: Colors.white,
                     fontWeight: FontWeight.w600,
