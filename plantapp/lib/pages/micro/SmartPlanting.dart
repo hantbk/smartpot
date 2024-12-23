@@ -29,8 +29,8 @@ class _SmartPlantingState extends State<SmartPlanting> {
   String sensedsoil = "25";
   double minHumidity = 0;
   double maxHumidity = 100;
-  String soilMoistureCondition = "Loading..."; // Thêm dòng này
-  Color soilMoistureColor = Colors.grey; // Thêm dòng này
+  String soilMoistureCondition = "Loading...";
+  Color soilMoistureColor = Colors.grey;
 
   late DatabaseReference _soilRef;
   final NotificationService _notificationService = NotificationService();
@@ -221,12 +221,13 @@ class _SmartPlantingState extends State<SmartPlanting> {
         SizedBox(height: 25),
         GestureDetector(
           onTap: () {
-            widget.motorSwitch(widget.motor == 21 ? 20 : 21);
+            widget.motorSwitch(
+                (widget.motor == 20 || widget.motor == 21) ? 0 : 20);
           },
           child: Container(
             width: 200,
             decoration: BoxDecoration(
-              color: widget.motor == 21
+              color: (widget.motor == 20 || widget.motor == 21)
                   ? Color.fromRGBO(74, 173, 82, 1)
                   : Color.fromRGBO(203, 203, 203, 1),
               borderRadius: BorderRadius.circular(10),
@@ -235,12 +236,17 @@ class _SmartPlantingState extends State<SmartPlanting> {
               padding: const EdgeInsets.all(8.0),
               child: Center(
                 child: Text(
-                  widget.motor == 21 ? "Auto On" : "Auto Off",
+                  (widget.motor == 20 || widget.motor == 21)
+                      ? "Auto On"
+                      : "Auto Off",
                   style: GoogleFonts.poppins(
                     fontSize: 20,
-                    color: widget.motor == 21 ? Colors.white : Colors.black,
-                    fontWeight:
-                        widget.motor == 21 ? FontWeight.w800 : FontWeight.w400,
+                    color: (widget.motor == 20 || widget.motor == 21)
+                        ? Colors.white
+                        : Colors.black,
+                    fontWeight: (widget.motor == 20 || widget.motor == 21)
+                        ? FontWeight.w800
+                        : FontWeight.w400,
                   ),
                 ),
               ),

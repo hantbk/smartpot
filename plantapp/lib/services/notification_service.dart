@@ -1,4 +1,5 @@
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class NotificationService {
   final FlutterLocalNotificationsPlugin _notificationsPlugin =
@@ -9,6 +10,7 @@ class NotificationService {
   }
 
   void _initialize() async {
+    requestNotificationPermission();
     const AndroidInitializationSettings initializationSettingsAndroid =
         AndroidInitializationSettings('@mipmap/ic_launcher');
     const InitializationSettings initializationSettings =
@@ -27,5 +29,12 @@ class NotificationService {
     const NotificationDetails platformChannelSpecifics =
         NotificationDetails(android: androidPlatformChannelSpecifics);
     _notificationsPlugin.show(0, title, body, platformChannelSpecifics);
+  }
+
+  Future<void> requestNotificationPermission() async {
+    // Kiểm tra quyền POST_NOTIFICATIONS trên Android 13+
+    if (await Permission.notification.isDenied) {
+      await Permission.notification.request();
+    }
   }
 }
