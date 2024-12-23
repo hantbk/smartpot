@@ -3,17 +3,23 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:plantapp/pages/micro/semicircle_indicator.dart';
 import 'package:plantapp/pages/models/Plant.dart';
+import 'package:plantapp/services/notification_service.dart';
 
 class SmartPlanting extends StatefulWidget {
   final Function(int) motorSwitch;
   final int motor;
   final Plant selectedPlant;
 
-  const SmartPlanting(
-      {super.key,
-      required this.motorSwitch,
-      required this.motor,
-      required this.selectedPlant});
+  // Thêm các callback để lắng nghe thay đổi
+  final Function(String, Color) onSoilMoistureChange;
+
+  const SmartPlanting({
+    super.key,
+    required this.motorSwitch,
+    required this.motor,
+    required this.selectedPlant,
+    required this.onSoilMoistureChange,
+  });
 
   @override
   _SmartPlantingState createState() => _SmartPlantingState();
@@ -23,8 +29,11 @@ class _SmartPlantingState extends State<SmartPlanting> {
   String sensedsoil = "25";
   double minHumidity = 0;
   double maxHumidity = 100;
+  String soilMoistureCondition = "Loading..."; // Thêm dòng này
+  Color soilMoistureColor = Colors.grey; // Thêm dòng này
 
   late DatabaseReference _soilRef;
+  final NotificationService _notificationService = NotificationService();
 
   @override
   void initState() {
@@ -38,14 +47,43 @@ class _SmartPlantingState extends State<SmartPlanting> {
     _soilRef.onValue.listen((event) {
       setState(() {
         final data = event.snapshot.value as Map<dynamic, dynamic>?;
-
         final current = data?['current'] as num?;
         final min = data?['min'] as num?;
         final max = data?['max'] as num?;
-
         sensedsoil = current?.toStringAsFixed(1) ?? "";
         minHumidity = min?.toDouble() ?? 0;
         maxHumidity = max?.toDouble() ?? 100;
+
+        // Gọi callback khi giá trị thay đổi
+        if (current != null) {
+          if (current < minHumidity) {
+            soilMoistureCondition = "Soil Moisture too low";
+            soilMoistureColor = Colors.red;
+          } else if (current > maxHumidity) {
+            soilMoistureCondition = "Soil Moisture too high";
+            soilMoistureColor = Colors.blue;
+          } else {
+            soilMoistureCondition = "Soil Moisture suitable for plant";
+            soilMoistureColor = Colors.green;
+          }
+
+          widget.onSoilMoistureChange(soilMoistureCondition, soilMoistureColor);
+        }
+        if (current != null) {
+          if (current < minHumidity || current > maxHumidity) {
+            if (widget.motor == 0 || widget.motor == 1) {
+              _notificationService.showNotification(
+                "Manual Mode Alert",
+                "Soil moisture is outside the range. Please adjust the pump manually.",
+              );
+            } else if (widget.motor == 21 || widget.motor == 20) {
+              _notificationService.showNotification(
+                "Auto Mode Alert",
+                "Soil moisture is outside the range. The motor has been activated automatically.",
+              );
+            }
+          }
+        }
       });
     });
   }

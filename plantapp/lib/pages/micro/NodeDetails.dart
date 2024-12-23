@@ -27,6 +27,7 @@ class _NodeDetailsState extends State<NodeDetails> {
     selectedPlant = widget.plant;
     _motorRef =
         FirebaseDatabase.instance.ref().child('${selectedPlant.potId}/mayBom');
+    _setupListeners(); // Call the setupListeners here
   }
 
   final Future<FirebaseApp> _fApp = Firebase.initializeApp();
@@ -34,6 +35,7 @@ class _NodeDetailsState extends State<NodeDetails> {
   String sensedhumidity = "0";
   String sensedlight = "0";
   String sensedTankLevel = "0";
+  String sensedsoil = "0";
   int motor = 0;
 
   motorSwitch(int valueStateOfMayBom) async {
@@ -42,6 +44,100 @@ class _NodeDetailsState extends State<NodeDetails> {
       // print(motor);
     });
     await _motorRef.set(motor);
+  }
+
+  void handleSoilMoistureChange(String condition, Color color) {
+    setState(() {
+      soilMoistureCondition = condition;
+      soilMoistureColor = color;
+    });
+  }
+
+  // Initialize these variables in initState or as class members
+  String temperatureCondition = "Loading...";
+  String soilMoistureCondition = "Loading...";
+  Color temperatureColor = Colors.grey;
+  Color soilMoistureColor = Colors.grey;
+
+  void _setupListeners() {
+    Query _tempRef = FirebaseDatabase.instance
+        .ref()
+        .child("${selectedPlant.potId}/dhtNhietDo");
+
+    Query _humidityRef =
+        FirebaseDatabase.instance.ref().child("${selectedPlant.potId}/dhtDoAm");
+
+    Query _lightRef =
+        FirebaseDatabase.instance.ref().child("${selectedPlant.potId}/anhSang");
+
+    Query _tankRef = FirebaseDatabase.instance
+        .ref()
+        .child("${selectedPlant.potId}/khoangCach");
+
+    // Listen for changes in humidity
+    _humidityRef.onValue.listen((event) {
+      setState(() {
+        final rawData = event.snapshot.value
+            .toString(); // Example: "{current: 32.9, min: 30.0, max: 80.0}"
+        final parsedValue = double.tryParse(
+            rawData.replaceAll(RegExp(r'[^\d.]'), '')); // Extracts: "32.9"
+        sensedhumidity = parsedValue?.toStringAsFixed(1) ?? ""; // Safely assign
+      });
+    });
+
+    // Listen for changes in temperature
+    _tempRef.onValue.listen((event) {
+      setState(() {
+        final rawData =
+            event.snapshot.value.toString(); // Example: "{current: 29.2}"
+        final parsedValue = double.tryParse(
+            rawData.replaceAll(RegExp(r'[^\d.]'), '')); // Extracts: "29.2"
+        sensedtemp = parsedValue?.toStringAsFixed(1) ?? ""; // Safely assign
+
+        if (parsedValue != null) {
+          if (parsedValue < selectedPlant.minTemp) {
+            temperatureCondition = "Temperature too low";
+            temperatureColor = Colors.blue;
+          } else if (parsedValue > selectedPlant.maxTemp) {
+            temperatureCondition = "Temperature too high";
+            temperatureColor = Colors.red;
+          } else {
+            temperatureCondition = "Suitable temperature for growing";
+            temperatureColor = Colors.green;
+          }
+        }
+      });
+    });
+
+    // Listen for changes in light intensity
+    _lightRef.onValue.listen((event) {
+      setState(() {
+        final rawData =
+            event.snapshot.value.toString(); // Example: "{current: 29.2}"
+        final parsedValue = double.tryParse(
+            rawData.replaceAll(RegExp(r'[^\d.]'), '')); // Extracts: "29.2"
+        sensedlight = parsedValue?.toStringAsFixed(1) ?? ""; // Safely assign
+      });
+    });
+
+    // Listen for changes in tank level
+    _tankRef.onValue.listen((event) {
+      final double tankHeight =
+          double.parse(dotenv.env['TANK_HEIGHT'] ?? '19.0');
+      setState(() {
+        final rawData =
+            event.snapshot.value.toString(); // Example: "{current: 50.0}"
+        final parsedValue = double.tryParse(
+            rawData.replaceAll(RegExp(r'[^\d.]'), '')); // Extracts: "50.0"
+        if (parsedValue != null) {
+          sensedTankLevel = ((1 - (parsedValue / tankHeight)) * 100)
+              .clamp(0, 100) // Clamp between 0 and 100
+              .toStringAsFixed(1); // Format as a percentage
+        } else {
+          sensedTankLevel = ""; // Handle invalid values
+        }
+      });
+    });
   }
 
   @override
@@ -81,9 +177,7 @@ class _NodeDetailsState extends State<NodeDetails> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            SizedBox(
-              height: 40,
-            ),
+            const SizedBox(height: 20),
             Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -100,13 +194,14 @@ class _NodeDetailsState extends State<NodeDetails> {
                     selectedPlant.name,
                     style: GoogleFonts.poppins(
                         color: Colors.black,
-                        fontWeight: FontWeight.w400,
+                        fontWeight: FontWeight.w600,
                         fontSize: 18),
                   ),
                 ],
               ),
             ),
-            Image.asset(selectedPlant.imageUrl),
+            Image.asset(selectedPlant.imageUrl,
+                height: 400, width: 250, fit: BoxFit.scaleDown),
             Padding(
                 padding:
                     const EdgeInsets.symmetric(vertical: 8.0, horizontal: 20),
@@ -138,7 +233,7 @@ class _NodeDetailsState extends State<NodeDetails> {
                 // TO DO: Add model feature here
                 onPressed: () {
                   // runModel(double.parse(sensedtemp),
-                  //     double.parse(sensedhumidity), sensedrainfall.toDouble());
+                  //     double.parse(sensedhumidity), sensedrainfall.toDouble());
                   showInformation(context, selectedPlant.id);
                 },
                 style: ElevatedButton.styleFrom(
@@ -184,9 +279,11 @@ class _NodeDetailsState extends State<NodeDetails> {
                 )),
             const SizedBox(height: 40),
             SmartPlanting(
-                motorSwitch: motorSwitch,
-                motor: motor,
-                selectedPlant: selectedPlant),
+              motorSwitch: motorSwitch,
+              motor: motor,
+              selectedPlant: selectedPlant,
+              onSoilMoistureChange: handleSoilMoistureChange,
+            )
           ],
         ),
       ),
@@ -194,101 +291,80 @@ class _NodeDetailsState extends State<NodeDetails> {
   }
 
   Widget sensorcontent() {
-    final double tankHeight = double.parse(dotenv.env['TANK_HEIGHT'] ?? '19.0');
-
-    Query _tempRef = FirebaseDatabase.instance
-        .ref()
-        .child("${selectedPlant.potId}/dhtNhietDo");
-
-    Query _humidityRef =
-        FirebaseDatabase.instance.ref().child("${selectedPlant.potId}/dhtDoAm");
-
-    Query _lightRef =
-        FirebaseDatabase.instance.ref().child("${selectedPlant.potId}/anhSang");
-
-    Query _tankRef = FirebaseDatabase.instance
-        .ref()
-        .child("${selectedPlant.potId}/khoangCach");
-
-    // Listen for changes in humidity
-    _humidityRef.onValue.listen((event) {
-      setState(() {
-        final rawData = event.snapshot.value
-            .toString(); // Example: "{current: 32.9, min: 30.0, max: 80.0}"
-        final parsedValue = double.tryParse(
-            rawData.replaceAll(RegExp(r'[^\d.]'), '')); // Extracts: "32.9"
-        sensedhumidity = parsedValue?.toStringAsFixed(1) ?? ""; // Safely assign
-      });
-    });
-
-    // Listen for changes in temperature
-    _tempRef.onValue.listen((event) {
-      setState(() {
-        final rawData =
-            event.snapshot.value.toString(); // Example: "{current: 29.2}"
-        final parsedValue = double.tryParse(
-            rawData.replaceAll(RegExp(r'[^\d.]'), '')); // Extracts: "29.2"
-        sensedtemp = parsedValue?.toStringAsFixed(1) ?? ""; // Safely assign
-      });
-    });
-
-    // Listen for changes in light intensity
-    _lightRef.onValue.listen((event) {
-      setState(() {
-        final rawData =
-            event.snapshot.value.toString(); // Example: "{current: 29.2}"
-        final parsedValue = double.tryParse(
-            rawData.replaceAll(RegExp(r'[^\d.]'), '')); // Extracts: "29.2"
-        sensedlight = parsedValue?.toStringAsFixed(1) ?? ""; // Safely assign
-      });
-    });
-
-    // Listen for changes in tank level
-    _tankRef.onValue.listen((event) {
-      setState(() {
-        final rawData =
-            event.snapshot.value.toString(); // Example: "{current: 50.0}"
-        final parsedValue = double.tryParse(
-            rawData.replaceAll(RegExp(r'[^\d.]'), '')); // Extracts: "50.0"
-        if (parsedValue != null) {
-          sensedTankLevel = ((1 - (parsedValue / tankHeight)) * 100)
-              .clamp(0, 100) // Clamp between 0 and 100
-              .toStringAsFixed(1); // Format as a percentage
-        } else {
-          sensedTankLevel = ""; // Handle invalid values
-        }
-      });
-    });
-
-    return GridView.count(
-      crossAxisCount: 2,
-      childAspectRatio: 2,
-      shrinkWrap: true,
-      padding: const EdgeInsets.symmetric(
-        horizontal: 15,
-        vertical: 10,
-      ),
-      physics: const NeverScrollableScrollPhysics(),
+    return Column(
       children: [
-        SensorDetails(
-          sensedval: "$sensedtemp°C",
-          icon: Icons.thermostat,
-          stype: "Temperature",
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 15.0),
+          child: Column(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: temperatureColor,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Text(
+                  temperatureCondition,
+                  style: GoogleFonts.poppins(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.white,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+              const SizedBox(height: 10),
+              Container(
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: soilMoistureColor,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Text(
+                  soilMoistureCondition,
+                  style: GoogleFonts.poppins(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.white,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ],
+          ),
         ),
-        SensorDetails(
-          sensedval: "$sensedhumidity%",
-          icon: Icons.water,
-          stype: "Humidity",
-        ),
-        SensorDetails(
-          sensedval: "$sensedTankLevel%",
-          icon: Icons.water_damage,
-          stype: "Tank Level",
-        ),
-        SensorDetails(
-          sensedval: "$sensedlight%",
-          icon: Icons.lightbulb,
-          stype: "Light Intensity",
+        const SizedBox(height: 10),
+        GridView.count(
+          crossAxisCount: 2,
+          childAspectRatio: 2,
+          shrinkWrap: true,
+          padding: const EdgeInsets.symmetric(
+            horizontal: 15,
+            vertical: 10,
+          ),
+          physics: const NeverScrollableScrollPhysics(),
+          children: [
+            SensorDetails(
+              sensedval: "$sensedtemp°C",
+              icon: Icons.thermostat,
+              stype: "Temperature",
+            ),
+            SensorDetails(
+              sensedval: "$sensedhumidity%",
+              icon: Icons.water,
+              stype: "Humidity",
+            ),
+            SensorDetails(
+              sensedval: "$sensedTankLevel%",
+              icon: Icons.water_damage,
+              stype: "Tank Level",
+            ),
+            SensorDetails(
+              sensedval: "$sensedlight%",
+              icon: Icons.lightbulb,
+              stype: "Light Intensity",
+            ),
+          ],
         ),
       ],
     );
@@ -352,7 +428,7 @@ void showInformation(BuildContext context, int plantId) {
                 ),
               ),
               Text(
-                plant.temperatureAdvice,
+                "Nhiệt độ lý tưởng: ${plant.minTemp} - ${plant.maxTemp}°C.",
                 style: TextStyle(fontSize: 16),
               ),
               SizedBox(height: 5),
